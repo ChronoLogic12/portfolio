@@ -1,0 +1,36 @@
+.section {
+  padding-top: var(--space-8);
+}
+
+.list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr));
+  gap: var(--space-3);
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px dashed var(--border);
+  border-radius: var(--radius);
+  transition: border-color var(--duration-fast) ease;
+}
+
+.item:hover {
+  border-color: var(--border-strong);
+}
+
+.title {
+  font-size: var(--text-base);
+  font-weight: 500;
+}
+
+.summary {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}

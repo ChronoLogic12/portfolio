@@ -15,8 +15,8 @@ Understanding the code matters as much as shipping it. Build in small steps, one
 - `site/` is TanStack Start with static prerendering. Only `site/dist/client` is deployed. Code in components runs at build time in Node and in the browser, so browser-only APIs go in effects.
 - `site/src/routeTree.gen.ts` is generated; never edit it.
 - No Tailwind. CSS Modules plus semantic tokens from `site/src/styles/tokens.css`; never raw colours or sizes in components. Dark first. `global.css` (fonts, tokens, reset) is imported once in `__root.tsx`.
-- Copy and placement live in `site/src/content/`, never hard-coded in components.
-- Components go in `components/layout/` (page structure) or `components/ui/` (reusable pieces). Links to other sites use `ExternalLink`.
+- Copy and placement live in `site/src/content/`, never hard-coded in components. Projects are Markdown files in `site/content/projects/`, validated by the zod schema in `site/content-collections.ts`; read them through `site/src/projects/`, not `allProjects` directly in components.
+- Components go in `components/layout/` (page structure), `components/ui/` (reusable pieces) or `components/<page>/` (used by one page, e.g. `components/home/`). Links to other sites use `ExternalLink`.
 - Headless UI from `radix-ui`; carousels with Embla; animation with Motion (respect `prefers-reduced-motion`).
 - Group code in folders that hold a module and its tests together (`utils/<name>/`, `hooks/<name>/`, `components/<name>/`). No catch-all `lib/` or `types/`.
 - Light Vitest tests alongside changes, colocated as `*.test.ts(x)`.

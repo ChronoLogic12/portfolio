@@ -1,0 +1,18 @@
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+  padding: 0;
+  list-style: none;
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+
+.link {
+  color: var(--text-muted);
+  transition: color var(--duration-fast) ease;
+}
+
+.link:hover {
+  color: var(--accent);
+}

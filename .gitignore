@@ -3,3 +3,4 @@ dist/
 .output/
 .tanstack/
 *.local
+.content-collections/

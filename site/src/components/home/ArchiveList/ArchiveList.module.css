@@ -1,0 +1,47 @@
+.section {
+  padding-top: var(--space-8);
+}
+
+.list {
+  padding: 0;
+  list-style: none;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 64px 1fr auto;
+  align-items: baseline;
+  gap: var(--space-4);
+  padding-block: var(--space-4);
+  border-top: 1px solid var(--border);
+}
+
+.year {
+  font-family: var(--font-mono);
+  font-size: var(--text-sm);
+  color: var(--text-faint);
+}
+
+.title {
+  font-size: var(--text-base);
+  font-weight: 500;
+}
+
+.summary {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.role {
+  color: var(--text-faint);
+}
+
+@media (max-width: 760px) {
+  .row {
+    grid-template-columns: 48px 1fr;
+  }
+
+  .row > :last-child {
+    grid-column: 2;
+  }
+}

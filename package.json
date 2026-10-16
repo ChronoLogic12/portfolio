@@ -19,5 +19,8 @@
   "devDependencies": {
     "oxlint": "^1.88.0",
     "prettier": "^3.9.10"
+  },
+  "allowScripts": {
+    "esbuild@0.25.12": true
   }
 }

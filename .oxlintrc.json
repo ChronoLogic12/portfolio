@@ -13,8 +13,24 @@
     "import/no-cycle": "error",
     "typescript/no-explicit-any": "error",
     "typescript/consistent-type-imports": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }],
-    "import/no-unassigned-import": ["warn", { "allow": ["**/*.css"] }]
+    "react/only-export-components": [
+      "warn",
+      {
+        "allowConstantExport": true
+      }
+    ],
+    "import/no-unassigned-import": [
+      "warn",
+      {
+        "allow": ["**/*.css"]
+      }
+    ],
+    "no-underscore-dangle": [
+      "warn",
+      {
+        "allow": ["_meta"]
+      }
+    ]
   },
   "ignorePatterns": ["**/dist/**", "site/src/routeTree.gen.ts"],
   "overrides": [

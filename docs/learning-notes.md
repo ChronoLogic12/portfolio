@@ -157,3 +157,60 @@ Details in the hook:
 - **`pointerType === 'mouse'`**: on touch screens there's no hover, so the glow would just jump to wherever you tapped. Touch devices see the plain grid
 - **Cleanup**: the effect returns a function that removes the listeners and cancels any pending frame, so nothing leaks if the hero unmounts (e.g. navigating to About)
 - The maths (`pointerOffset`) is a separate pure function with its own test, the same pattern as `pageTitle`
+
+## 5. Project content and the home page sections (16 Oct 2026)
+
+### One Markdown file per project
+
+Each project is a file in `site/content/projects/`, with YAML **frontmatter** (the block between `---` lines) for its data and, later, a Markdown body for the write-up:
+
+```md
+---
+title: UK grid tracker
+summary: Live view of Great Britain's electricity grid…
+year: 2026
+section: featured
+order: 1
+stack: [React, TypeScript, visx]
+links:
+  live: https://gridtracker.uk
+---
+```
+
+Moving a project between Selected work, Tinkering and Archive is changing `section`; reordering is changing `order`. No component changes.
+
+### content-collections
+
+The library TanStack's docs recommend for static Markdown. `site/content-collections.ts` defines a **collection**: which folder, which files, and a **zod schema** the frontmatter must match. At build time it:
+
+1. Reads every matching file and parses the frontmatter
+2. Validates it against the schema. A typo like `section: featurd` fails the build with `section: Invalid option: expected one of "featured"|"tinkering"|"archive"`, so a broken page can't ship
+3. Runs `transform` (here: adds `slug` from the file name)
+4. Writes the result as plain JS plus TypeScript types into `site/.content-collections/generated/` (gitignored, always regenerated)
+
+Code imports it as `import { allProjects } from 'content-collections'`. That name is a **path alias** in `tsconfig.json` pointing at the generated folder; `resolve.tsconfigPaths` lets Vite and Vitest follow it too. The `Project` type comes from the schema, so a component that reads `project.yaer` is a type error.
+
+The generated folder only exists after something runs content-collections. So `typecheck` and `test` have **`pre` scripts** (`pretypecheck`, `pretest`): npm runs `prefoo` automatically before `foo`, and these regenerate the content first. That's what lets a fresh clone or CI run `npm run check` straight away.
+
+### Querying the content
+
+`site/src/projects/projects.ts` has one function, `projectsIn(section)`: filter by section, sort by `order`. It uses `toSorted`, which returns a new array instead of sorting in place (ES2023, hence the tsconfig target bump). Sorting `allProjects` in place would reorder the shared list for every other caller, and the test checks it doesn't.
+
+### npm install scripts
+
+npm now asks before running a package's install script. content-collections depends on esbuild, whose script checks its native binary. It's approved in `allowScripts` in the root `package.json`, as in grid tracker. Anything new that wants a script shows up in `npm install-scripts ls`.
+
+### The sections
+
+| Component          | Renders                                                                                                                                                                             |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `FeaturedProjects` | The first featured project as a wide card spanning the grid, the rest as cards (`auto-fill` columns)                                                                                |
+| `ProjectCard`      | Cover (placeholder until screenshots exist), title, summary, stack tags, links                                                                                                      |
+| `TinkeringList`    | Dashed rows, deliberately quieter than the cards                                                                                                                                    |
+| `ArchiveList`      | Year, title, summary and role (e.g. "Design consultant and graphic designer" for Green Lawns), links                                                                                |
+| `SectionHeading`   | The mono uppercase heading and note. Its `id` (`projects`, `tinkering`, `archive`) is what `/#projects` scrolls to                                                                  |
+| `ProjectLinks`     | "Live site ↗" and "Code ↗", each only if the project has that link. `aria-label` adds the project name, so a screen reader hears "UK grid tracker: Live site", not just "Live site" |
+
+Section titles, notes and link labels live in `content/home.ts` with the hero copy.
+
+`grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr))` means "as many columns of at least 320px as fit". `auto-fill` keeps empty column slots, so a single card stays card-sized instead of stretching across the page. The `min(100%, …)` stops a 320px minimum overflowing on very narrow screens.

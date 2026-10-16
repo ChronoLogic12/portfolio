@@ -98,7 +98,8 @@ No email on the domain, so the only risk is a few minutes of mixed DNS answers.
    - Done: local repo, npm workspace `site/`, minimal TanStack Start app (`/` and `/about`), prerendering to `site/dist/client`, checked on a plain static server. Prettier, oxlint, typecheck, Vitest, `npm run check`, CLAUDE.md
    - Done: design tokens, fonts, global styles, `content/site.ts`, header, footer, Logo, Container
    - Done: home hero with the live dial, grid backdrop and mouse glow
-   - Next: the Selected work section and the project content files. CI waits for the GitHub repo
+   - Done: project content collection (14 projects, zod-validated), Selected work, Tinkering and Archive sections
+   - Next: project pages (`/projects/$slug`) with Markdown write-ups, About page, CV, favicon and Open Graph tags, then CI
 2. **Design:** sketch home and one project page; agree the look before building out
 3. **Content:** About text, updated CV, write-ups for featured projects, screenshots
 4. **Infra:** CDK stack, cert, hosted zone, deploy role; deploy to the CloudFront address
