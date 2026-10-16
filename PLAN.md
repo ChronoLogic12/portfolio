@@ -75,7 +75,7 @@ Project cards in a grid rather than a homepage carousel: a carousel hides all bu
 | daisy-reverb        | private | Hardware/firmware      | Tinkering. AI-assisted experiments, not a focus                   |
 | pico-2-clock        | public  | Hardware               | Tinkering                                                         |
 | BookMarks           | public  | Live on Render         | Archive                                                           |
-| Yggdramor (dnd-5e)  | public  | Live on Netlify        | Archive                                                           |
+| Yggdramor (dnd-5e)  | public  | Live on Netlify        | Featured. Still in use; may want some polish                      |
 | EDF6 countdown      | public  | Live on Netlify        | Archive                                                           |
 | Spaceman, Volume    | public  | Live on GitHub Pages   | Archive                                                           |
 | Tippy, Light Up     | public  | Down                   | Archive with repo link only, until revived                        |
