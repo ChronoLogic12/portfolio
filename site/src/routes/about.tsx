@@ -1,4 +1,5 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
+import { Container } from '../components/layout/Container/Container'
 import { pageTitle } from '../utils/pageTitle/pageTitle'
 
 export const Route = createFileRoute('/about')({
@@ -10,9 +11,8 @@ export const Route = createFileRoute('/about')({
 
 function About() {
   return (
-    <main>
+    <Container>
       <h1>About</h1>
-      <Link to="/">Home</Link>
-    </main>
+    </Container>
   )
 }

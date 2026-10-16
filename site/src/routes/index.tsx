@@ -1,4 +1,6 @@
-import { Link, createFileRoute } from '@tanstack/react-router'
+import { createFileRoute } from '@tanstack/react-router'
+import { Container } from '../components/layout/Container/Container'
+import { site } from '../content/site'
 
 export const Route = createFileRoute('/')({
   component: Home,
@@ -6,10 +8,9 @@ export const Route = createFileRoute('/')({
 
 function Home() {
   return (
-    <main>
-      <h1>Matthew Suttie</h1>
-      <p>Software developer.</p>
-      <Link to="/about">About</Link>
-    </main>
+    <Container>
+      <h1>{site.name}</h1>
+      <p>{site.role}</p>
+    </Container>
   )
 }

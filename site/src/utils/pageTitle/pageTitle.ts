@@ -1,3 +1,3 @@
-const SITE_NAME = 'Matthew Suttie'
+import { site } from '../../content/site'
 
-export const pageTitle = (page?: string) => (page ? `${page} · ${SITE_NAME}` : SITE_NAME)
+export const pageTitle = (page?: string) => (page ? `${page} · ${site.name}` : site.name)

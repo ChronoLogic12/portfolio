@@ -12,6 +12,7 @@ export default defineConfig({
         enabled: true,
         crawlLinks: true,
         failOnError: true,
+        filter: ({ path }) => !path.includes('#'),
       },
     }),
     viteReact(),

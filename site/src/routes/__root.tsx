@@ -1,12 +1,17 @@
 import type { ReactNode } from 'react'
 import { HeadContent, Outlet, Scripts, createRootRoute } from '@tanstack/react-router'
+import { SiteFooter } from '../components/layout/SiteFooter/SiteFooter'
+import { SiteHeader } from '../components/layout/SiteHeader/SiteHeader'
 import { pageTitle } from '../utils/pageTitle/pageTitle'
+import '../styles/global.css'
 
 export const Route = createRootRoute({
   head: () => ({
     meta: [
       { charSet: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
+      { name: 'color-scheme', content: 'dark' },
+      { name: 'theme-color', content: '#0c0d0f' },
       { title: pageTitle() },
     ],
   }),
@@ -16,14 +21,18 @@ export const Route = createRootRoute({
 function RootComponent() {
   return (
     <RootDocument>
-      <Outlet />
+      <SiteHeader />
+      <main>
+        <Outlet />
+      </main>
+      <SiteFooter />
     </RootDocument>
   )
 }
 
 function RootDocument({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en-GB" className="dark">
       <head>
         <HeadContent />
       </head>

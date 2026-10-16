@@ -69,3 +69,49 @@ They overlap less than it seems. `tsc` knows types but nothing about React's rul
 ### First test
 
 `site/src/utils/pageTitle/` holds a tiny pure function and its test side by side, following grid tracker's convention of keeping a module and its tests in one folder. Both routes now use it, so the "Page · Matthew Suttie" format lives in one place. Pure functions (input in, output out, nothing else touched) are the easiest thing to test, which is a good reason to push logic into them.
+
+## 3. Design tokens, global CSS and the base layout (16 Oct 2026)
+
+### Design tokens
+
+`site/src/styles/tokens.css` is the single place the look is defined: colours, fonts, type sizes, spacing, radii, page width and motion timings, all as CSS custom properties on `:root`. Components never use raw values like `#0c0d0f` or `24px`; they use `var(--bg)` or `var(--space-5)`. Changing the feel of the site means editing this one file.
+
+Tokens come in two layers:
+
+- **Raw scales** from Radix Colors (`--slate-1` … `--slate-12`, `--teal-1` … `--teal-12`). Each scale has 12 steps with fixed jobs: 1–2 backgrounds, 3–5 component fills, 6–8 borders, 9–10 solid colour, 11–12 text. That's why picking `--teal-11` for text is a safe contrast choice
+- **Semantic tokens** that say what a colour is _for_: `--surface-1`, `--border`, `--text-muted`, `--accent`. Components only use these. A light theme later is a second block of semantic values pointing at the light Radix scales; no component changes
+
+The Radix dark files only define their variables under `.dark`, which is why `<html>` has `className="dark"`.
+
+### How CSS gets into the page
+
+TanStack Start handles CSS imports like Vite does, plus it knows which CSS each route needs when prerendering:
+
+- `import '../styles/global.css'` in `__root.tsx`: a side-effect import, so it applies everywhere. It pulls in the fonts, the tokens and a small reset
+- `import styles from './SiteHeader.module.css'`: a **CSS Module**. Class names are rewritten to be unique (`.brand` becomes something like `_brand_1x2y3`), so two components can both have a `.bar` class without clashing. You use them as `className={styles.bar}`
+- At build time all of it is bundled into one stylesheet, and the prerendered HTML links it in `<head>`, so the page is styled before any JavaScript runs
+
+### Fonts
+
+`@fontsource-variable/inter` and `/jetbrains-mono` ship the font files in the npm package, so the site serves its own fonts instead of calling Google Fonts. That's faster, works offline, and keeps a future Content Security Policy simple. The build outputs a file per character set (latin, cyrillic, greek…), but each is tagged with a `unicode-range`, so a browser only downloads the ones it needs: for English, just the latin file.
+
+### Content kept separate from layout
+
+`site/src/content/site.ts` holds the name, role, nav items and profile links. The header and footer just loop over it. Adding a nav item or changing a link is a content edit. The nav's `to` is typed from the generated route tree (`FileRouteTypes['to']`), so a link to a page that doesn't exist fails the type check.
+
+### The layout
+
+| Component                      | Job                                                                                                              |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------- |
+| `components/layout/Container`  | Centres content and caps its width at `--page-width`, with side padding (`--page-gutter`)                        |
+| `components/layout/SiteHeader` | Logo and name linking home; main nav                                                                             |
+| `components/layout/SiteFooter` | Small logo, name, profile links                                                                                  |
+| `components/ui/Logo`           | The ChronoLogic mark as an inline SVG: one arc and seven rays, drawn from a list of coordinates                  |
+| `components/ui/ExternalLink`   | An `<a>` that opens in a new tab with `rel="noopener noreferrer"`, which stops the new page controlling this one |
+
+`__root.tsx` now wraps every page in header, `<main>` and footer, so pages only render their own content.
+
+### Two fixes along the way
+
+- **Array index as a React key.** oxlint flagged `key={index}` in `Logo`. React uses keys to match list items between renders; an index breaks that if items are reordered. Here the list never changes so it was harmless, but each ray has a natural unique key (its end point), so we use that
+- **The crawler followed `/#projects`.** The prerenderer treated the nav's hash link as a separate page and rendered the home page twice. A `filter` in `vite.config.ts` now skips any path with a `#`

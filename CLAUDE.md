@@ -14,7 +14,9 @@ Understanding the code matters as much as shipping it. Build in small steps, one
 - npm workspaces: `site/` now, `infra/` (CDK) later.
 - `site/` is TanStack Start with static prerendering. Only `site/dist/client` is deployed. Code in components runs at build time in Node and in the browser, so browser-only APIs go in effects.
 - `site/src/routeTree.gen.ts` is generated; never edit it.
-- No Tailwind. CSS Modules plus design tokens. Dark first.
+- No Tailwind. CSS Modules plus semantic tokens from `site/src/styles/tokens.css`; never raw colours or sizes in components. Dark first. `global.css` (fonts, tokens, reset) is imported once in `__root.tsx`.
+- Copy and placement live in `site/src/content/`, never hard-coded in components.
+- Components go in `components/layout/` (page structure) or `components/ui/` (reusable pieces). Links to other sites use `ExternalLink`.
 - Headless UI from `radix-ui`; carousels with Embla; animation with Motion (respect `prefers-reduced-motion`).
 - Group code in folders that hold a module and its tests together (`utils/<name>/`, `hooks/<name>/`, `components/<name>/`). No catch-all `lib/` or `types/`.
 - Light Vitest tests alongside changes, colocated as `*.test.ts(x)`.

@@ -1,0 +1,36 @@
+.footer {
+  margin-top: var(--space-9);
+  border-top: 1px solid var(--border);
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  padding-block: var(--space-6);
+  font-size: var(--text-sm);
+  color: var(--text-faint);
+}
+
+.name {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.links {
+  display: flex;
+  gap: var(--space-5);
+  padding: 0;
+  list-style: none;
+}
+
+.link {
+  color: var(--text-muted);
+  transition: color var(--duration-fast) ease;
+}
+
+.link:hover {
+  color: var(--text);
+}
