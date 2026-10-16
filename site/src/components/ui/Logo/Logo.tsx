@@ -1,14 +1,5 @@
+import { MARK_ARC, MARK_RAYS, MARK_VIEW_BOX, rayRestingOpacity } from './mark'
 import styles from './Logo.module.css'
-
-const RAYS = [
-  [0, -8, 0, -34],
-  [4, -7, 19, -33],
-  [7, -4, 33, -19],
-  [8, 0, 38, 0],
-  [7, 4, 33, 19],
-  [4, 7, 19, 33],
-  [0, 8, 0, 34],
-] as const
 
 interface LogoProps {
   size?: number
@@ -21,19 +12,16 @@ export function Logo({ size = 28, className }: LogoProps) {
       className={[styles.logo, className].filter(Boolean).join(' ')}
       width={size}
       height={size}
-      viewBox="-50 -50 100 100"
+      viewBox={MARK_VIEW_BOX}
       aria-hidden="true"
     >
-      <path className={styles.arc} d="M0 -44 A44 44 0 0 0 0 44" />
-      {RAYS.map(([x1, y1, x2, y2], index) => (
+      <path className={styles.arc} d={MARK_ARC} />
+      {MARK_RAYS.map((ray, index) => (
         <line
-          key={`${x2},${y2}`}
+          key={`${ray.x2},${ray.y2}`}
           className={styles.ray}
-          x1={x1}
-          y1={y1}
-          x2={x2}
-          y2={y2}
-          style={{ opacity: 1 - index * 0.09 }}
+          {...ray}
+          style={{ opacity: rayRestingOpacity(index) }}
         />
       ))}
     </svg>
