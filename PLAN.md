@@ -10,30 +10,30 @@ Out of scope for now: reviving Tippy and the other dead Heroku/Render apps, and 
 
 ## Where things stand
 
-| Thing                 | State                                                                                                                                                                                       |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| matthewsuttie.com     | Registered with Name.com, very likely through Netlify (registered 10 Mar 2022, **expires 10 Mar 2027**). DNS on Netlify (NS1). Apex redirects to `www`. No email                            |
-| Live site             | `ms-portfolio-site` (v1): static HTML + Materialize on Netlify. Out-of-date About text and CV; Light Up (Heroku) is 404, Tippy (Render) times out                                           |
-| `ms-portfolio-v2`     | Unfinished Django + React prototype from Oct 2024. Never deployed. Nothing worth carrying over                                                                                               |
-| gridtracker.uk        | Route 53 domain and hosted zone, CloudFront flat-rate Free plan, CDK in `eu-west-2`, deployed by GitHub Actions with OIDC. The template for this site                                        |
+| Thing             | State                                                                                                                                                            |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| matthewsuttie.com | Registered with Name.com, very likely through Netlify (registered 10 Mar 2022, **expires 10 Mar 2027**). DNS on Netlify (NS1). Apex redirects to `www`. No email |
+| Live site         | `ms-portfolio-site` (v1): static HTML + Materialize on Netlify. Out-of-date About text and CV; Light Up (Heroku) is 404, Tippy (Render) times out                |
+| `ms-portfolio-v2` | Unfinished Django + React prototype from Oct 2024. Never deployed. Nothing worth carrying over                                                                   |
+| gridtracker.uk    | Route 53 domain and hosted zone, CloudFront flat-rate Free plan, CDK in `eu-west-2`, deployed by GitHub Actions with OIDC. The template for this site            |
 
 ## Decisions
 
-| Area        | Choice                                                     | Notes                                                                                                                                                                                                   |
-| ----------- | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Repo        | New repo `portfolio`, npm workspaces `site/` + `infra/`    | Archive `ms-portfolio-site` and `ms-portfolio-v2` on GitHub after cutover                                                                                                                                |
-| Build       | Vite, React 19, TypeScript                                 | Same toolchain and conventions as uk-grid-tracker (Prettier, oxlint, strict TS, Vitest, no comments)                                                                                                    |
-| Rendering   | TanStack Start, static prerender                           | Every route is rendered to HTML at build time, so each project page has its own title and Open Graph tags and shared links get proper previews. Uses TanStack Router, as in grid tracker. No server at runtime: the output is plain files for S3 |
-| Branding    | ChronoLogic logo for favicon and social images             | Name on the page is Matthew Suttie                                                                                                                                                                      |
-| Contact     | No email address for now                                   | GitHub and LinkedIn only. Email on the domain is a separate learning exercise for later                                                                                                                |
-| UI          | Radix Primitives (`radix-ui`) + Radix Colors               | Headless; the same look as grid tracker. Dialog, Tooltip, NavigationMenu, Tabs, etc.                                                                                                                    |
-| Carousel    | Embla (`embla-carousel-react`)                             | Headless, small, the standard choice (shadcn's carousel is built on it). For screenshot galleries on project pages                                                                                       |
-| Motion      | Motion (`motion`)                                          | Page transitions, scroll reveals, hover states. This is most of what makes it feel slick. Respect `prefers-reduced-motion`                                                                              |
-| Styling     | CSS Modules + design tokens, Inter variable                | No Tailwind, matching grid tracker. Dark first; light theme later as a second token block                                                                                                               |
-| Content     | Projects as MDX or Markdown + frontmatter in the repo       | No backend or CMS. Each project: title, one-liner, year, stack, links, cover image, write-up                                                                                                            |
-| Hosting     | S3 + CloudFront (flat-rate Free plan) + Route 53, via CDK  | Same AWS account and region as grid tracker. Cert in `us-east-1` requested via CLI, pinned like `site-domain.ts`                                                                                         |
-| Deploy      | GitHub Actions, OIDC role                                  | Copy grid tracker's `github-deploy-stack` pattern                                                                                                                                                         |
-| Analytics   | GoatCounter, cookie-free                                   | Same as grid tracker; no consent banner                                                                                                                                                                 |
+| Area      | Choice                                                    | Notes                                                                                                                                                                                                                                            |
+| --------- | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Repo      | New repo `portfolio`, npm workspaces `site/` + `infra/`   | Archive `ms-portfolio-site` and `ms-portfolio-v2` on GitHub after cutover                                                                                                                                                                        |
+| Build     | Vite, React 19, TypeScript                                | Same toolchain and conventions as uk-grid-tracker (Prettier, oxlint, strict TS, Vitest, no comments)                                                                                                                                             |
+| Rendering | TanStack Start, static prerender                          | Every route is rendered to HTML at build time, so each project page has its own title and Open Graph tags and shared links get proper previews. Uses TanStack Router, as in grid tracker. No server at runtime: the output is plain files for S3 |
+| Branding  | ChronoLogic logo for favicon and social images            | Name on the page is Matthew Suttie                                                                                                                                                                                                               |
+| Contact   | No email address for now                                  | GitHub and LinkedIn only. Email on the domain is a separate learning exercise for later                                                                                                                                                          |
+| UI        | Radix Primitives (`radix-ui`) + Radix Colors              | Headless; the same look as grid tracker. Dialog, Tooltip, NavigationMenu, Tabs, etc.                                                                                                                                                             |
+| Carousel  | Embla (`embla-carousel-react`)                            | Headless, small, the standard choice (shadcn's carousel is built on it). For screenshot galleries on project pages                                                                                                                               |
+| Motion    | Motion (`motion`)                                         | Page transitions, scroll reveals, hover states. This is most of what makes it feel slick. Respect `prefers-reduced-motion`                                                                                                                       |
+| Styling   | CSS Modules + design tokens, Inter variable               | No Tailwind, matching grid tracker. Dark first; light theme later as a second token block                                                                                                                                                        |
+| Content   | Projects as MDX or Markdown + frontmatter in the repo     | No backend or CMS. Each project: title, one-liner, year, stack, links, cover image, write-up                                                                                                                                                     |
+| Hosting   | S3 + CloudFront (flat-rate Free plan) + Route 53, via CDK | Same AWS account and region as grid tracker. Cert in `us-east-1` requested via CLI, pinned like `site-domain.ts`                                                                                                                                 |
+| Deploy    | GitHub Actions, OIDC role                                 | Copy grid tracker's `github-deploy-stack` pattern                                                                                                                                                                                                |
+| Analytics | GoatCounter, cookie-free                                  | Same as grid tracker; no consent banner                                                                                                                                                                                                          |
 
 ## Site shape (first version)
 
@@ -47,19 +47,19 @@ Project cards in a grid rather than a homepage carousel: a carousel hides all bu
 
 ## Candidate projects
 
-| Project             | Repo    | Status                     | Placement                                                                     |
-| ------------------- | ------- | -------------------------- | ----------------------------------------------------------------------------- |
-| UK grid tracker     | private | Live at gridtracker.uk     | Featured, the flagship. Link to the live site; repo stays private              |
-| daisy-reverb        | private | Hardware/firmware          | Featured if you're happy to write it up; photos of the pedal would carry it   |
-| pico-2-clock        | public  | Hardware                   | Featured or archive                                                            |
-| This site           | public  | —                          | Featured (infra write-up)                                                      |
-| Green Lawns Kennels | other   | Live client site           | Featured or archive                                                            |
-| BookMarks           | public  | Live on Render             | Archive                                                                        |
-| Yggdramor (dnd-5e)  | public  | Live on Netlify            | Archive                                                                        |
-| EDF6 countdown      | public  | Live on Netlify            | Archive                                                                        |
-| Spaceman, Volume    | public  | Live on GitHub Pages       | Archive                                                                        |
-| Tippy, Light Up     | public  | Down                       | Archive with repo link only, until revived                                     |
-| mortgage-tracker    | public  | Local only                 | Later                                                                          |
+| Project             | Repo    | Status                 | Placement                                                                   |
+| ------------------- | ------- | ---------------------- | --------------------------------------------------------------------------- |
+| UK grid tracker     | private | Live at gridtracker.uk | Featured, the flagship. Link to the live site; repo stays private           |
+| daisy-reverb        | private | Hardware/firmware      | Featured if you're happy to write it up; photos of the pedal would carry it |
+| pico-2-clock        | public  | Hardware               | Featured or archive                                                         |
+| This site           | public  | —                      | Featured (infra write-up)                                                   |
+| Green Lawns Kennels | other   | Live client site       | Featured or archive                                                         |
+| BookMarks           | public  | Live on Render         | Archive                                                                     |
+| Yggdramor (dnd-5e)  | public  | Live on Netlify        | Archive                                                                     |
+| EDF6 countdown      | public  | Live on Netlify        | Archive                                                                     |
+| Spaceman, Volume    | public  | Live on GitHub Pages   | Archive                                                                     |
+| Tippy, Light Up     | public  | Down                   | Archive with repo link only, until revived                                  |
+| mortgage-tracker    | public  | Local only             | Later                                                                       |
 
 ## Domain migration
 
@@ -75,8 +75,8 @@ No email on the domain, so the only risk is a few minutes of mixed DNS answers.
 ## Phases
 
 1. **Scaffold:** new repo, Vite + React + TS, tokens, layout, prerendering, CI (format, lint, typecheck, test)
-   - Done: local repo, npm workspace `site/`, minimal TanStack Start app (`/` and `/about`), prerendering to `site/dist/client`, checked on a plain static server
-   - Next: Prettier, oxlint, `tsc` typecheck, Vitest, CLAUDE.md, then tokens and the base layout. CI waits for the GitHub repo
+   - Done: local repo, npm workspace `site/`, minimal TanStack Start app (`/` and `/about`), prerendering to `site/dist/client`, checked on a plain static server. Prettier, oxlint, typecheck, Vitest, `npm run check`, CLAUDE.md
+   - Next: tokens and the base layout. CI waits for the GitHub repo
 2. **Design:** sketch home and one project page; agree the look before building out
 3. **Content:** About text, updated CV, write-ups for featured projects, screenshots
 4. **Infra:** CDK stack, cert, hosted zone, deploy role; deploy to the CloudFront address
