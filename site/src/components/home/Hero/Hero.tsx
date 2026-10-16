@@ -4,13 +4,17 @@ import { site } from '../../../content/site'
 import { Container } from '../../layout/Container/Container'
 import { Dial } from '../../ui/Dial/Dial'
 import { ExternalLink } from '../../ui/ExternalLink/ExternalLink'
+import { usePointerTracking } from '../../../hooks/usePointerTracking/usePointerTracking'
 import styles from './Hero.module.css'
 
 export function Hero() {
   const { eyebrow, headline, intro, primaryAction } = home.hero
+  const heroRef = usePointerTracking<HTMLElement>()
 
   return (
-    <section className={styles.hero}>
+    <section ref={heroRef} className={styles.hero}>
+      <div className={styles.grid} aria-hidden="true" />
+      <div className={styles.glow} aria-hidden="true" />
       <Container>
         <div className={styles.layout}>
           <div>

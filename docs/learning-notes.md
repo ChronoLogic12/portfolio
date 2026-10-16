@@ -115,3 +115,45 @@ TanStack Start handles CSS imports like Vite does, plus it knows which CSS each 
 
 - **Array index as a React key.** oxlint flagged `key={index}` in `Logo`. React uses keys to match list items between renders; an index breaks that if items are reordered. Here the list never changes so it was harmless, but each ray has a natural unique key (its end point), so we use that
 - **The crawler followed `/#projects`.** The prerenderer treated the nav's hash link as a separate page and rendered the home page twice. A `filter` in `vite.config.ts` now skips any path with a `#`
+
+## 4. The hero: animated dial, grid and mouse glow (16 Oct 2026)
+
+### Hero content
+
+`site/src/content/home.ts` holds the eyebrow, headline, intro and the main button. `Hero` reads it, so rewording the hero is a content edit.
+
+### The dial: CSS animation driven by custom properties
+
+`components/ui/Logo/mark.ts` holds the logo's geometry (the arc path and the seven rays) so `Logo` (static, in the header) and `Dial` (animated, in the hero) draw the same shape from one source.
+
+The sweep is pure CSS, no JavaScript:
+
+- Each ray gets `--step` (0–6) as an inline custom property
+- They all run the same 7-second `sweep` keyframes, but each one's `animation-delay` is `--step × 1s`. So ray 0 flashes at 0s, ray 1 at 1s, and so on: a hand sweeping round. `--sweep-duration` controls the speed in one place
+- `animation-fill-mode: both` holds each ray at its first keyframe (dim) during its delay, so nothing flashes on load
+- Under `prefers-reduced-motion: reduce` the animation is switched off and each ray shows its resting opacity, matching the static logo
+
+CSS animations run on the browser's compositor without React re-rendering, and they work from the prerendered HTML before any JavaScript loads.
+
+### Grid and glow: two layers and a mask
+
+The hero has two empty `<div>`s behind its content (`z-index: -1` inside a section with `isolation: isolate`, so "behind" means behind the hero content, not behind the page):
+
+1. **`.grid`**: lines drawn with two `linear-gradient`s (one horizontal, one vertical) repeated every 48px. A radial `mask-image` fades it out towards the edges
+2. **`.glow`**: the same grid, in teal, with a faint teal fill. Its mask is _two_ gradients combined with `mask-composite: intersect`: a 220px circle at the pointer, and the same edge fade. So it only shows where both allow, which keeps the glow inside the faded grid area
+
+Both layers share `--grid-size` and `background-position`, so the teal lines sit exactly on top of the grey ones. The glow looks like light coming through the lines, not a separate shape.
+
+### Tracking the pointer without re-rendering React
+
+`hooks/usePointerTracking/` writes the pointer position as CSS custom properties (`--pointer-x`, `--pointer-y`) straight onto the hero element, plus `data-pointer="inside"` while the mouse is over it. CSS does the rest.
+
+Why not React state? `pointermove` fires many times a second. Putting the position in `useState` would re-render the hero on every move. Writing to the element's style changes only what CSS reads, so React doesn't re-render at all.
+
+Details in the hook:
+
+- **`useRef` + `useEffect`**: the ref gives the real DOM element, and the effect runs only in the browser, never during prerendering in Node, where there's no mouse or `window`
+- **`requestAnimationFrame`**: at most one update per screen frame, dropping any extra events in between
+- **`pointerType === 'mouse'`**: on touch screens there's no hover, so the glow would just jump to wherever you tapped. Touch devices see the plain grid
+- **Cleanup**: the effect returns a function that removes the listeners and cancels any pending frame, so nothing leaks if the hero unmounts (e.g. navigating to About)
+- The maths (`pointerOffset`) is a separate pure function with its own test, the same pattern as `pageTitle`

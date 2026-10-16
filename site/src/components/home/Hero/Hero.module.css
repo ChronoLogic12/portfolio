@@ -1,5 +1,44 @@
 .hero {
+  --grid-size: 48px;
+  --grid-fade: radial-gradient(70% 80% at 60% 40%, #000 30%, transparent 75%);
+  --glow-radius: 220px;
+
+  position: relative;
+  isolation: isolate;
+  overflow: clip;
   padding-block: var(--space-9);
+}
+
+.grid,
+.glow {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: var(--grid-size) var(--grid-size);
+  background-position: center top;
+}
+
+.grid {
+  --line: var(--grid-line);
+  mask-image: var(--grid-fade);
+}
+
+.glow {
+  --line: var(--accent-solid);
+  background-color: color-mix(in srgb, var(--accent-solid) 4%, transparent);
+  mask-image:
+    radial-gradient(var(--glow-radius) circle at var(--pointer-x, 50%) var(--pointer-y, 50%), #000, transparent),
+    var(--grid-fade);
+  mask-composite: intersect;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.hero[data-pointer='inside'] .glow {
+  opacity: 1;
 }
 
 .layout {
