@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "port": 3000
+    },
+    {
+      "name": "static-build",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["--yes", "serve@14.2.4", "site/dist/client", "-l", "4173"],
+      "port": 4173
+    }
+  ]
+}

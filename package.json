@@ -1,0 +1,13 @@
+{
+  "name": "portfolio",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "site"
+  ],
+  "scripts": {
+    "dev": "npm run dev -w @portfolio/site",
+    "build": "npm run build -w @portfolio/site",
+    "preview": "npm run preview -w @portfolio/site"
+  }
+}
