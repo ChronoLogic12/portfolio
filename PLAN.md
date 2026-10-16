@@ -30,10 +30,30 @@ Out of scope for now: reviving Tippy and the other dead Heroku/Render apps, and 
 | Carousel  | Embla (`embla-carousel-react`)                            | Headless, small, the standard choice (shadcn's carousel is built on it). For screenshot galleries on project pages                                                                                                                               |
 | Motion    | Motion (`motion`)                                         | Page transitions, scroll reveals, hover states. This is most of what makes it feel slick. Respect `prefers-reduced-motion`                                                                                                                       |
 | Styling   | CSS Modules + design tokens, Inter variable               | No Tailwind, matching grid tracker. Dark first; light theme later as a second token block                                                                                                                                                        |
-| Content   | Projects as MDX or Markdown + frontmatter in the repo     | No backend or CMS. Each project: title, one-liner, year, stack, links, cover image, write-up                                                                                                                                                     |
+| Content   | Content kept apart from layout, in files in the repo      | No backend or CMS. See "Content model" below                                                                                                                                                                                                     |
 | Hosting   | S3 + CloudFront (flat-rate Free plan) + Route 53, via CDK | Same AWS account and region as grid tracker. Cert in `us-east-1` requested via CLI, pinned like `site-domain.ts`                                                                                                                                 |
 | Deploy    | GitHub Actions, OIDC role                                 | Copy grid tracker's `github-deploy-stack` pattern                                                                                                                                                                                                |
 | Analytics | GoatCounter, cookie-free                                  | Same as grid tracker; no consent banner                                                                                                                                                                                                          |
+
+## Design
+
+Direction A, "Instrument", chosen 16 Oct 2026. Sketch: `design/directions.html` (A with toggles; C kept for reference).
+
+- **Palette:** near-black `#0c0d0f` background, Radix slate for surfaces, borders and text, Radix teal as the one accent (teal-9 fills, teal-11 text and lines). Teal ties together the logo, grid tracker and this site
+- **Type:** Inter for everything; JetBrains Mono for small labels (eyebrow, section heads, tags, years)
+- **Layout:** wide max width (~1120px). Hero with intro and links on the left, the dial on the right. Selected work as a card grid with one wide featured card. Tinkering as small dashed rows. Archive as a plain list
+- **The ChronoLogic dial is the signature.** The logo's rays light up in turn like a clock hand sweeping round, and the arc slowly brightens and dims. Static under `prefers-reduced-motion`
+- **Grid with a mouse glow:** faint grid lines behind the hero, faded at the edges. Under the mouse the lines (plus a very faint fill) light up teal in a ~220px circle. Mouse only; touch devices just see the static grid
+- **Not doing:** the blinking cursor (too much alongside the rest), the static glow. Possible later: a subtle cursor that types in the subheading
+
+## Content model
+
+Content stays separate from layout so the prose and what appears where can change without touching components.
+
+- **Projects:** one file per project with frontmatter (title, slug, summary, year, stack, links, cover image, `section: featured | tinkering | archive`, `order`) and a Markdown/MDX body for the write-up
+- **Site copy:** hero eyebrow, headline, intro, link list, section titles and notes in one typed content file
+- Components only read this content; changing placement is a frontmatter edit
+- Schema validated at build time (zod), so a typo fails the build instead of shipping a broken page
 
 ## Site shape (first version)
 
@@ -47,19 +67,19 @@ Project cards in a grid rather than a homepage carousel: a carousel hides all bu
 
 ## Candidate projects
 
-| Project             | Repo    | Status                 | Placement                                                                   |
-| ------------------- | ------- | ---------------------- | --------------------------------------------------------------------------- |
-| UK grid tracker     | private | Live at gridtracker.uk | Featured, the flagship. Link to the live site; repo stays private           |
-| daisy-reverb        | private | Hardware/firmware      | Featured if you're happy to write it up; photos of the pedal would carry it |
-| pico-2-clock        | public  | Hardware               | Featured or archive                                                         |
-| This site           | public  | —                      | Featured (infra write-up)                                                   |
-| Green Lawns Kennels | other   | Live client site       | Featured or archive                                                         |
-| BookMarks           | public  | Live on Render         | Archive                                                                     |
-| Yggdramor (dnd-5e)  | public  | Live on Netlify        | Archive                                                                     |
-| EDF6 countdown      | public  | Live on Netlify        | Archive                                                                     |
-| Spaceman, Volume    | public  | Live on GitHub Pages   | Archive                                                                     |
-| Tippy, Light Up     | public  | Down                   | Archive with repo link only, until revived                                  |
-| mortgage-tracker    | public  | Local only             | Later                                                                       |
+| Project             | Repo    | Status                 | Placement                                                         |
+| ------------------- | ------- | ---------------------- | ----------------------------------------------------------------- |
+| UK grid tracker     | private | Live at gridtracker.uk | Featured, the flagship. Link to the live site; repo stays private |
+| This site           | public  | —                      | Featured (infra write-up)                                         |
+| Green Lawns Kennels | other   | Live client site       | Featured. Description needs confirming                            |
+| daisy-reverb        | private | Hardware/firmware      | Tinkering. AI-assisted experiments, not a focus                   |
+| pico-2-clock        | public  | Hardware               | Tinkering                                                         |
+| BookMarks           | public  | Live on Render         | Archive                                                           |
+| Yggdramor (dnd-5e)  | public  | Live on Netlify        | Archive                                                           |
+| EDF6 countdown      | public  | Live on Netlify        | Archive                                                           |
+| Spaceman, Volume    | public  | Live on GitHub Pages   | Archive                                                           |
+| Tippy, Light Up     | public  | Down                   | Archive with repo link only, until revived                        |
+| mortgage-tracker    | public  | Local only             | Later                                                             |
 
 ## Domain migration
 
