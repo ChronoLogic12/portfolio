@@ -6,12 +6,13 @@ interface MarkProps {
   arcClassName?: string
   rayClassName?: string
   size?: number
+  disc?: boolean
 }
 
-export function Mark({ className, arcClassName, rayClassName, size }: MarkProps) {
+export function Mark({ className, arcClassName, rayClassName, size, disc = true }: MarkProps) {
   return (
     <svg className={className} width={size} height={size} viewBox={MARK_VIEW_BOX} aria-hidden="true">
-      <circle r={MARK_DISC_RADIUS} fill={MARK_COLOURS.disc} />
+      {disc && <circle r={MARK_DISC_RADIUS} fill={MARK_COLOURS.disc} />}
       <path
         className={arcClassName}
         d={MARK_ARC.d}
@@ -29,7 +30,7 @@ export function Mark({ className, arcClassName, rayClassName, size }: MarkProps)
           strokeWidth={MARK_RAY_WIDTH}
           strokeLinecap="round"
           opacity={opacity}
-          style={{ '--step': step } as CSSProperties}
+          style={{ '--step': step, '--resting-opacity': opacity } as CSSProperties}
         />
       ))}
     </svg>

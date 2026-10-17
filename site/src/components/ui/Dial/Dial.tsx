@@ -7,6 +7,7 @@ export function Dial({ className }: { className?: string }) {
       className={[styles.dial, className].filter(Boolean).join(' ')}
       arcClassName={styles.arc}
       rayClassName={styles.ray}
+      disc={false}
     />
   )
 }
