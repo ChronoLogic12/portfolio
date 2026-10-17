@@ -100,7 +100,8 @@ No email on the domain, so the only risk is a few minutes of mixed DNS answers.
    - Done: home hero with the live dial, grid backdrop and mouse glow
    - Done: project content collection (14 projects, zod-validated), Selected work, Tinkering and Archive sections
    - Done: project pages (`/projects/$slug`) for any project with a Markdown write-up, starter write-ups for the three featured projects, 404 page, per-page titles and descriptions
-   - Next: About page, CV, favicon and Open Graph image, then CI. Write-up prose needs a pass from Matthew
+   - Done: favicon and app icons generated from the logo geometry, web manifest, CI workflow (format, lint, typecheck, test, build)
+   - Next: About page (needs Matthew's input), CV, project cover images and Open Graph image. Write-up prose needs a pass from Matthew
 2. **Design:** sketch home and one project page; agree the look before building out
 3. **Content:** About text, updated CV, write-ups for featured projects, screenshots
 4. **Infra:** CDK stack, cert, hosted zone, deploy role; deploy to the CloudFront address

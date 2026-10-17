@@ -17,6 +17,11 @@ export const Route = createRootRoute({
       { title: pageTitle() },
       { name: 'description', content: site.description },
     ],
+    links: [
+      { rel: 'icon', type: 'image/svg+xml', href: '/favicon.svg' },
+      { rel: 'apple-touch-icon', href: '/apple-touch-icon.png' },
+      { rel: 'manifest', href: '/manifest.webmanifest' },
+    ],
   }),
   component: RootComponent,
   notFoundComponent: NotFound,

@@ -268,3 +268,32 @@ The usual fix is the **stretched link**:
 - Screen readers and keyboards see one ordinary link per card, named by the project title. The focus ring moves to the whole card with `.linked:has(.cardLink:focus-visible)`: `:has()` styles a parent based on its children
 
 Cards without a write-up don't get the `linked` class, so they don't lift on hover or look clickable.
+
+## 8. Icons, the web manifest and CI (17 Oct 2026)
+
+### Icons from one source
+
+`site/scripts/icons.ts` (run with `npm run icons -w @portfolio/site`) builds every icon from the same geometry the `Logo` component uses (`mark.ts`), so they can't drift apart:
+
+| File                   | Used by                                                                                                                                |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------- |
+| `favicon.svg`          | Browser tabs. SVG stays sharp at any size; round, dark background                                                                      |
+| `apple-touch-icon.png` | iOS "Add to Home Screen" (180px). iOS doesn't use SVG icons here, and adds its own rounded corners                                     |
+| `icon-192/512.png`     | Android and the web manifest. Marked `maskable`: Android may crop them to a circle or squircle, so the logo sits well inside the edges |
+
+The script writes an SVG string and has **sharp** (a fast image library, the same one image optimisation will use later) render it to PNG. It's plain TypeScript run directly by Node 24, which strips type annotations itself, so no build step is needed. The outputs are committed; rerun the script only if the logo changes.
+
+Files in `site/public/` are copied as they are to the root of the build, so `/favicon.svg` is served at that path. The root route's `head()` links them on every page.
+
+`manifest.webmanifest` describes the site when someone installs it or adds it to a home screen: name, colours and icons. Its description duplicates `site.description` because it's a static JSON file; keep the two in step.
+
+### CI
+
+`.github/workflows/ci.yml` runs on every push to `main` and on pull requests:
+
+1. `npm ci` installs exactly what's in `package-lock.json`. Unlike `npm install`, it never updates the lockfile, so CI tests what you committed
+2. Format check, lint, typecheck, tests (`pretypecheck` regenerates the content collection first), then a full build including prerendering
+
+Each action is pinned to a **commit SHA**, with the version in a comment, not a tag like `@v7`. A tag can be moved to different code; a SHA can't. Same as grid tracker. `permissions: contents: read` gives the job a token that can only read the repo.
+
+There's no deploy job yet. That comes with the CDK infrastructure, using the same OIDC role pattern as grid tracker.
