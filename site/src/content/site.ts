@@ -18,6 +18,7 @@ export const site = {
   projectLinks: {
     live: 'Live site',
     repo: 'Code',
+    github: 'GitHub',
   },
   projectPage: {
     back: 'All projects',

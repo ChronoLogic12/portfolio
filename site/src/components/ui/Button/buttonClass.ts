@@ -1,7 +1,7 @@
 import styles from './Button.module.css'
 
 interface ButtonOptions {
-  variant?: 'default' | 'primary' | 'unavailable'
+  variant?: 'default' | 'primary' | 'accent' | 'strong' | 'unavailable'
   size?: 'default' | 'small'
 }
 
@@ -9,6 +9,8 @@ export const buttonClass = ({ variant = 'default', size = 'default' }: ButtonOpt
   [
     styles.button,
     variant === 'primary' && styles.primary,
+    variant === 'accent' && styles.accent,
+    variant === 'strong' && styles.strong,
     variant === 'unavailable' && styles.unavailable,
     size === 'small' && styles.small,
   ]

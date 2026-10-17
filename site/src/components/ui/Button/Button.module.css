@@ -40,6 +40,27 @@
   background: var(--accent);
 }
 
+.accent {
+  border-color: var(--accent-border);
+  background: var(--accent-subtle);
+  color: var(--accent);
+}
+
+.accent:hover {
+  border-color: var(--accent-solid);
+  background: color-mix(in srgb, var(--accent-solid) 26%, var(--bg));
+}
+
+.strong {
+  border-color: var(--border-strong);
+  background: var(--surface-2);
+}
+
+.strong:hover {
+  border-color: var(--text-faint);
+  background: var(--slate-4);
+}
+
 .unavailable {
   border-style: dashed;
   background: transparent;
