@@ -1,6 +1,5 @@
 import { Link } from '@tanstack/react-router'
 import type { Project } from 'content-collections'
-import { site } from '../../../content/site'
 import { ProjectLinks } from '../../ui/ProjectLinks/ProjectLinks'
 import { StackTags } from '../../ui/StackTags/StackTags'
 import styles from './ProjectCard.module.css'
@@ -11,8 +10,10 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ project, wide = false }: ProjectCardProps) {
+  const classNames = [styles.card, wide && styles.wide, project.hasPage && styles.linked].filter(Boolean).join(' ')
+
   return (
-    <article className={wide ? `${styles.card} ${styles.wide}` : styles.card}>
+    <article className={classNames}>
       <div className={styles.cover} aria-hidden="true">
         <span>{project.slug}</span>
       </div>
@@ -20,7 +21,7 @@ export function ProjectCard({ project, wide = false }: ProjectCardProps) {
         {wide && <p className={styles.eyebrow}>Featured · {project.year}</p>}
         <h3 className={styles.title}>
           {project.hasPage ? (
-            <Link to="/projects/$slug" params={{ slug: project.slug }} className={styles.titleLink}>
+            <Link to="/projects/$slug" params={{ slug: project.slug }} className={styles.cardLink}>
               {project.title}
             </Link>
           ) : (
@@ -29,12 +30,7 @@ export function ProjectCard({ project, wide = false }: ProjectCardProps) {
         </h3>
         <p className={styles.summary}>{project.summary}</p>
         <StackTags stack={project.stack} />
-        <div className={styles.footer}>
-          {project.hasPage && (
-            <Link to="/projects/$slug" params={{ slug: project.slug }} className={styles.readMore}>
-              {site.projectPage.readMore} →
-            </Link>
-          )}
+        <div className={styles.links}>
           <ProjectLinks project={project} />
         </div>
       </div>

@@ -255,3 +255,16 @@ Now that the home page and project pages both show stack tags and links, `StackT
 
 - **Links work before JavaScript.** A click on a project link before React has hydrated is a normal full page load of the prerendered HTML. After hydration the router intercepts clicks and swaps the page in the browser. Both end up in the same place
 - **`routeTree.gen.ts` lags behind new route files** until `dev` or `build` runs the router plugin. Adding `$slug.tsx` and running `check` straight away gave type errors that `/projects/$slug` didn't exist; after a build regenerated the tree, they went away. Commit the regenerated file with the new route
+
+## 7. Making a whole card clickable (17 Oct 2026)
+
+You can't wrap the whole card in one `<a>`, because the card contains other links ("Live site ↗", "Code ↗"), and links inside links are invalid HTML. Browsers handle that unpredictably.
+
+The usual fix is the **stretched link**:
+
+- The title is the real link to the write-up
+- Its `::after` pseudo-element is absolutely positioned with `inset: 0`, so it stretches over the whole card (the card is `position: relative`). Clicking anywhere on the card hits that invisible layer, which belongs to the title link
+- The external links sit in a wrapper with `position: relative; z-index: 1`, which lifts them above the overlay so they still get their own clicks
+- Screen readers and keyboards see one ordinary link per card, named by the project title. The focus ring moves to the whole card with `.linked:has(.cardLink:focus-visible)`: `:has()` styles a parent based on its children
+
+Cards without a write-up don't get the `linked` class, so they don't lift on hover or look clickable.

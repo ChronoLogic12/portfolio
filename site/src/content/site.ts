@@ -28,7 +28,6 @@ export const site = {
     repo: 'Code',
   },
   projectPage: {
-    readMore: 'Read the write-up',
     back: 'All projects',
     builtWith: 'Built with',
   },
