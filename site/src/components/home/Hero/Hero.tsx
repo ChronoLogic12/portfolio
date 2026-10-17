@@ -4,6 +4,7 @@ import { site } from '../../../content/site'
 import { Container } from '../../layout/Container/Container'
 import { Dial } from '../../ui/Dial/Dial'
 import { ExternalLink } from '../../ui/ExternalLink/ExternalLink'
+import { Tooltip } from '../../ui/Tooltip/Tooltip'
 import { usePointerTracking } from '../../../hooks/usePointerTracking/usePointerTracking'
 import styles from './Hero.module.css'
 
@@ -36,6 +37,13 @@ export function Hero() {
                   </ExternalLink>
                 </li>
               ))}
+              <li>
+                <Tooltip content={site.cv.unavailable}>
+                  <button type="button" aria-disabled="true" className={`${styles.button} ${styles.unavailable}`}>
+                    {site.cv.label}
+                  </button>
+                </Tooltip>
+              </li>
             </ul>
           </div>
           <Dial className={styles.dial} />

@@ -11,6 +11,10 @@ export const site = {
     { label: 'GitHub', href: 'https://github.com/ChronoLogic12' },
     { label: 'LinkedIn', href: 'https://www.linkedin.com/in/matthew-suttie-756191212/' },
   ] satisfies ProfileLink[],
+  cv: {
+    label: 'CV',
+    unavailable: "My CV is being updated. Get in touch on LinkedIn if you'd like a copy.",
+  },
   projectLinks: {
     live: 'Live site',
     repo: 'Code',

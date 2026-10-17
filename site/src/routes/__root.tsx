@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import { HeadContent, Outlet, Scripts, createRootRoute } from '@tanstack/react-router'
 import { NotFound } from '../components/layout/NotFound/NotFound'
 import { SiteFooter } from '../components/layout/SiteFooter/SiteFooter'
+import { TooltipProvider } from '../components/ui/Tooltip/Tooltip'
 import { site } from '../content/site'
 import { pageTitle } from '../utils/pageTitle/pageTitle'
 import '../styles/global.css'
@@ -29,10 +30,12 @@ export const Route = createRootRoute({
 function RootComponent() {
   return (
     <RootDocument>
-      <main>
-        <Outlet />
-      </main>
-      <SiteFooter />
+      <TooltipProvider delayDuration={200}>
+        <main>
+          <Outlet />
+        </main>
+        <SiteFooter />
+      </TooltipProvider>
     </RootDocument>
   )
 }

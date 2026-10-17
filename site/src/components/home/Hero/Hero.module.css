@@ -114,6 +114,21 @@
   background: var(--accent);
 }
 
+.button.unavailable {
+  border-style: dashed;
+  background: transparent;
+  color: var(--text-faint);
+  font: inherit;
+  font-size: var(--text-sm);
+  font-weight: 500;
+  cursor: not-allowed;
+}
+
+.button.unavailable:hover {
+  border-color: var(--border-strong);
+  background: transparent;
+}
+
 .dial {
   justify-self: center;
   width: min(340px, 100%);

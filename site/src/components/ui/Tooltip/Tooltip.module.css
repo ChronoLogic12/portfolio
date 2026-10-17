@@ -1,0 +1,30 @@
+.content {
+  max-width: 260px;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  font-size: var(--text-sm);
+  line-height: 1.45;
+  color: var(--text);
+  box-shadow: 0 8px 24px rgb(0 0 0 / 0.4);
+  transform-origin: var(--radix-tooltip-content-transform-origin);
+  animation: appear var(--duration) var(--ease-out);
+}
+
+.arrow {
+  fill: var(--surface-2);
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    transform: translateY(4px) scale(0.97);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .content {
+    animation: none;
+  }
+}
