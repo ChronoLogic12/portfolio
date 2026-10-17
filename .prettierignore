@@ -3,3 +3,4 @@ coverage
 site/src/routeTree.gen.ts
 package-lock.json
 .content-collections
+cdk.out

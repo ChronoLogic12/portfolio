@@ -31,14 +31,33 @@
         "allow": ["_meta"]
       }
     ],
-    "no-await-in-loop": "off"
+    "no-await-in-loop": "off",
+    "vitest/expect-expect": [
+      "error",
+      {
+        "assertFunctionNames": [
+          "expect",
+          "template.hasResource",
+          "template.hasResourceProperties",
+          "template.resourceCountIs",
+          "template.hasOutput"
+        ]
+      }
+    ],
+    "no-new": "off"
   },
-  "ignorePatterns": ["**/dist/**", "site/src/routeTree.gen.ts"],
+  "ignorePatterns": ["**/dist/**", "site/src/routeTree.gen.ts", "**/cdk.out/**"],
   "overrides": [
     {
       "files": ["site/src/routes/**"],
       "rules": {
         "react/only-export-components": "off"
+      }
+    },
+    {
+      "files": ["infra/lib/edge/*.js"],
+      "rules": {
+        "no-unused-vars": "off"
       }
     }
   ]

@@ -21,6 +21,7 @@ export default defineConfig({
         failOnError: true,
         filter: ({ path }) => !path.includes('#'),
       },
+      pages: [{ path: '/404', prerender: { enabled: true, outputPath: '/404.html' } }],
     }),
     viteReact(),
   ],

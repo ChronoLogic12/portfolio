@@ -92,6 +92,42 @@ No email on the domain, so the only risk is a few minutes of mixed DNS answers.
 5. Decide apex vs `www` as the canonical host (grid tracker uses the apex; recommend the same) and 301 the other
 6. Remove the site from Netlify. Leave the other Netlify sites (Yggdramor, EDF6) alone for now
 
+## Infrastructure design (draft, 17 Oct 2026)
+
+Same AWS account (797286749899) and region (eu-west-2) as grid tracker, following its patterns. New npm workspace `infra/` with a CDK app in TypeScript.
+
+**Stacks**
+
+- **`PortfolioSite`**: private S3 bucket (no public access; CloudFront reads it through Origin Access Control), a CloudFront distribution on the flat-rate **Free** plan (the account allows three; grid tracker uses one), and two `BucketDeployment`s: hashed `assets/` cached for a year, pages revalidated on every request and invalidated on deploy
+- **`PortfolioGitHubDeploy`**: an IAM role that only `main` of `ChronoLogic12/portfolio` can assume from GitHub Actions (immutable OIDC subject), and which can only assume the CDK deploy roles. No AWS keys in GitHub
+
+**Serving prerendered pages from S3.** S3 doesn't know that `/projects/yggdramor` means `projects/yggdramor/index.html`. A small CloudFront Function on viewer requests rewrites any path without a file extension to `<path>/index.html` (dropping a trailing slash). Missing files come back from S3 as 403, which CloudFront turns into the prerendered 404 page with a 404 status.
+
+**Shared account set-up (agreed in principle 17 Oct 2026)**
+
+The default CDK bootstrap runs CloudFormation with `UkGridTrackerCfnExecution`, a policy limited to grid tracker's resources, so it would refuse to create portfolio resources. And AWS allows one GitHub OIDC provider per account, which `UkGridTrackerGitHubDeploy` currently owns. Rather than solve both inside one project, a small **account repo** (`aws-account-management`, private) owns everything shared:
+
+- **`GitHubOidc` stack**: the one GitHub OIDC provider, which every project's deploy role references
+- **`ProjectAccess` stack**: for each project, a CloudFormation execution policy and a role boundary, generated from one template function. Every project gets the same base (its own name-prefixed buckets, roles and logs, CloudFront, bootstrap reads, roles that must keep the boundary) plus only the extras it needs: Lambda, schedules and alarms for grid tracker; nothing extra for the portfolio yet; a hosted zone and certificate for each once its domain moves. Adding a project is a few lines here
+- Each project bootstraps once with its own qualifier, pointing at its policy: `cdk bootstrap --qualifier <project> --cloudformation-execution-policies <ProjectCfnExecution>`. Grid tracker keeps the default qualifier it already has, so its deploys don't change
+- The account repo is deployed by hand with the admin profile. It changes rarely, and it's the only thing with that much access
+
+**Moving grid tracker over safely** (the OIDC provider can't exist twice, and deleting it would break grid tracker's deploys):
+
+1. Grid tracker: set the provider to `RETAIN` and deploy, so removing it from that stack later keeps it in AWS
+2. Grid tracker: reference the provider by ARN instead of creating it, and deploy. CloudFormation forgets it, but it stays in AWS
+3. Account repo: bring the existing provider under `GitHubOidc` with `cdk import`
+4. Move grid tracker's execution policy and boundary, which were created by hand from its scripts, into `ProjectAccess` the same way. `cdk diff` must show no permission changes for grid tracker
+
+**Order**
+
+1. Infra workspace, stacks and CDK unit tests (synth only, no AWS needed)
+2. Account repo with the policy template; portfolio policies deployed, then `cdk bootstrap --qualifier portfolio` (needs an AWS sign-in). The grid tracker move can follow separately; the portfolio only needs the OIDC provider to exist, not where it lives
+3. First deploy from this machine, then subscribe the distribution to the Free plan in the console
+4. Check the site on its `*.cloudfront.net` address: pages, project pages, 404, caching headers
+5. Deploy role and a deploy job in CI, so every push to `main` goes live
+6. Later, with the domain move: Route 53 hosted zone, a us-east-1 certificate, apex and `www` aliases, redirect `www` to the apex
+
 ## Phases
 
 1. **Scaffold:** new repo, Vite + React + TS, tokens, layout, prerendering, CI (format, lint, typecheck, test)

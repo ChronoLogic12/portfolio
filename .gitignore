@@ -7,3 +7,4 @@ dist/
 
 # Personal learning notes, kept locally
 docs/learning-notes.md
+cdk.out/
