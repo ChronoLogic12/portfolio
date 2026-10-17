@@ -119,6 +119,8 @@ The default CDK bootstrap runs CloudFormation with `UkGridTrackerCfnExecution`, 
 3. Account repo: bring the existing provider under `GitHubOidc` with `cdk import`
 4. Move grid tracker's execution policy and boundary, which were created by hand from its scripts, into `ProjectAccess` the same way. `cdk diff` must show no permission changes for grid tracker
 
+**Progress (17 Oct 2026):** steps 1 and the code for 2 are done. `infra/` synthesises with tests. `C:Usersmsuttcodeaws-account-management` (local, private, not on GitHub yet) has the policy template, tested to reproduce grid tracker's policies exactly, and an `AccountProjectAccess` stack for the portfolio. Nothing is deployed. Waiting on an AWS sign-in.
+
 **Order**
 
 1. Infra workspace, stacks and CDK unit tests (synth only, no AWS needed)
