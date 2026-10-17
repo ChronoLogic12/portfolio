@@ -11,9 +11,11 @@ import { usePointerTracking } from '../../../hooks/usePointerTracking/usePointer
 import { isGitHub } from '../../../utils/isGitHub/isGitHub'
 import styles from './Hero.module.css'
 
+const GLOW_FOLLOW_RATE = 0.12
+
 export function Hero() {
   const { eyebrow, tagline, intro, primaryAction } = home.hero
-  const heroRef = usePointerTracking<HTMLElement>()
+  const heroRef = usePointerTracking<HTMLElement>({ followRate: GLOW_FOLLOW_RATE })
 
   return (
     <section ref={heroRef} className={styles.hero}>
