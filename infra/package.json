@@ -6,7 +6,7 @@
     "test": "vitest run",
     "typecheck": "tsc --noEmit",
     "synth": "cdk synth",
-    "diff": "cdk diff --all",
+    "diff": "cdk diff",
     "deploy": "cdk deploy --all"
   },
   "devDependencies": {
