@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router'
 import { home } from '../../../content/home'
 import { site } from '../../../content/site'
 import { Container } from '../../layout/Container/Container'
+import { buttonClass } from '../../ui/Button/buttonClass'
 import { Dial } from '../../ui/Dial/Dial'
 import { ExternalLink } from '../../ui/ExternalLink/ExternalLink'
 import { Tooltip } from '../../ui/Tooltip/Tooltip'
@@ -26,20 +27,20 @@ export function Hero() {
             <p className={styles.intro}>{intro}</p>
             <ul className={styles.actions}>
               <li>
-                <Link to="/" hash={primaryAction.hash} className={`${styles.button} ${styles.primary}`}>
+                <Link to="/" hash={primaryAction.hash} className={buttonClass({ variant: 'primary' })}>
                   {primaryAction.label} →
                 </Link>
               </li>
               {site.profiles.map((profile) => (
                 <li key={profile.label}>
-                  <ExternalLink href={profile.href} className={styles.button}>
+                  <ExternalLink href={profile.href} className={buttonClass()}>
                     {profile.label}
                   </ExternalLink>
                 </li>
               ))}
               <li>
                 <Tooltip content={site.cv.unavailable}>
-                  <button type="button" aria-disabled="true" className={`${styles.button} ${styles.unavailable}`}>
+                  <button type="button" aria-disabled="true" className={buttonClass({ variant: 'unavailable' })}>
                     {site.cv.label}
                   </button>
                 </Tooltip>

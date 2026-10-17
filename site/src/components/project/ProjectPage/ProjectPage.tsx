@@ -28,7 +28,7 @@ export function ProjectPage({ project }: { project: Project }) {
             <p className={styles.summary}>{project.summary}</p>
             <div className={styles.meta}>
               <StackTags stack={project.stack} />
-              <ProjectLinks project={project} />
+              <ProjectLinks project={project} size="default" />
             </div>
           </header>
           {cover && (

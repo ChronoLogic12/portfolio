@@ -7,7 +7,7 @@ export const home = {
     primaryAction: { label: 'See projects', hash: 'projects' },
   },
   sections: {
-    featured: { id: 'projects', title: 'Selected work', note: 'web projects' },
+    featured: { id: 'projects', title: 'Selected work' },
     tinkering: { id: 'tinkering', title: 'Tinkering', note: 'small experiments, mostly hardware' },
     archive: { id: 'archive', title: 'Archive', note: 'earlier projects' },
   },
