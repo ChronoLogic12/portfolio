@@ -119,7 +119,7 @@ The default CDK bootstrap runs CloudFormation with `UkGridTrackerCfnExecution`, 
 3. Account repo: bring the existing provider under `GitHubOidc` with `cdk import`
 4. Move grid tracker's execution policy and boundary, which were created by hand from its scripts, into `ProjectAccess` the same way. `cdk diff` must show no permission changes for grid tracker
 
-**Progress (17 Oct 2026):** steps 1 and the code for 2 are done. `infra/` synthesises with tests. `../aws-account-management` (local, private, not on GitHub yet) has the policy template, tested to reproduce grid tracker's policies exactly, and an `AccountProjectAccess` stack for the portfolio. Nothing is deployed. Waiting on an AWS sign-in.
+**Progress (17 Oct 2026):** steps 1 to 4 done. `AccountProjectAccess` is deployed (portfolio policies, checked against the template). `CDKToolkit-portfolio` is bootstrapped with `PortfolioCfnExecution`. Both portfolio stacks are deployed: site at https://dr2jt7ge5l0jr.cloudfront.net (distribution `E1QAX8LKFC915I`), deploy role output as `DeployRoleArn`. Checked: pages 200, trailing slash 301, unknown paths 404 with the 404 page, assets cached a year, pages revalidated, security headers, AVIF and WebP content types. Next: Free plan in the console (then pin its web ACL in code), then the CI deploy job
 
 **Order**
 
