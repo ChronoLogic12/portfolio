@@ -113,7 +113,7 @@ Understanding the code matters as much as shipping it. So:
 
 - Build in small steps, one concept at a time, and explain each step's what and why before or as it lands, especially anything new (TanStack Start, prerendering, CDK constructs, CloudFront behaviours, DNS)
 - Prefer writing code over adding a library when the code is short and teaches something
-- Keep a short `docs/learning-notes.md` of the concepts covered and where they show up in the code, so they can be revisited
+- Keep a short `docs/learning-notes.md` of the concepts covered and where they show up in the code, so they can be revisited. It is gitignored, so it stays local
 - Stop and check understanding before moving to the next phase
 
 ## Later

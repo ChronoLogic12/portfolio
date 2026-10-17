@@ -4,3 +4,6 @@ dist/
 .tanstack/
 *.local
 .content-collections/
+
+# Personal learning notes, kept locally
+docs/learning-notes.md

@@ -4,7 +4,7 @@ Personal site for matthewsuttie.com. Read `PLAN.md` first: it holds the plan, de
 
 ## Working together
 
-Understanding the code matters as much as shipping it. Build in small steps, one concept at a time, and explain the what and why of anything new as it lands. Add each concept to `docs/learning-notes.md` with where it shows up in the code. Check in before moving to the next phase.
+Understanding the code matters as much as shipping it. Build in small steps, one concept at a time, and explain the what and why of anything new as it lands. Add each concept to `docs/learning-notes.md` with where it shows up in the code. That file is gitignored: it stays on this machine and is never committed. Check in before moving to the next phase.
 
 ## Conventions
 
