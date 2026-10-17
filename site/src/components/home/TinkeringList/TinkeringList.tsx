@@ -1,7 +1,7 @@
 import { home } from '../../../content/home'
 import { projectsIn } from '../../../projects/projects'
 import { Container } from '../../layout/Container/Container'
-import { ProjectLinks } from '../ProjectLinks/ProjectLinks'
+import { ProjectLinks } from '../../ui/ProjectLinks/ProjectLinks'
 import { SectionHeading } from '../SectionHeading/SectionHeading'
 import styles from './TinkeringList.module.css'
 

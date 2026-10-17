@@ -11,8 +11,4 @@ export const home = {
     tinkering: { id: 'tinkering', title: 'Tinkering', note: 'small experiments, mostly hardware' },
     archive: { id: 'archive', title: 'Archive', note: 'earlier projects' },
   },
-  projectLinks: {
-    live: 'Live site',
-    repo: 'Code',
-  },
 }

@@ -1,5 +1,8 @@
+import { Link } from '@tanstack/react-router'
 import type { Project } from 'content-collections'
-import { ProjectLinks } from '../ProjectLinks/ProjectLinks'
+import { site } from '../../../content/site'
+import { ProjectLinks } from '../../ui/ProjectLinks/ProjectLinks'
+import { StackTags } from '../../ui/StackTags/StackTags'
 import styles from './ProjectCard.module.css'
 
 interface ProjectCardProps {
@@ -15,18 +18,25 @@ export function ProjectCard({ project, wide = false }: ProjectCardProps) {
       </div>
       <div className={styles.body}>
         {wide && <p className={styles.eyebrow}>Featured · {project.year}</p>}
-        <h3 className={styles.title}>{project.title}</h3>
+        <h3 className={styles.title}>
+          {project.hasPage ? (
+            <Link to="/projects/$slug" params={{ slug: project.slug }} className={styles.titleLink}>
+              {project.title}
+            </Link>
+          ) : (
+            project.title
+          )}
+        </h3>
         <p className={styles.summary}>{project.summary}</p>
-        {project.stack.length > 0 && (
-          <ul className={styles.stack} aria-label="Built with">
-            {project.stack.map((item) => (
-              <li key={item} className={styles.tag}>
-                {item}
-              </li>
-            ))}
-          </ul>
-        )}
-        <ProjectLinks project={project} />
+        <StackTags stack={project.stack} />
+        <div className={styles.footer}>
+          {project.hasPage && (
+            <Link to="/projects/$slug" params={{ slug: project.slug }} className={styles.readMore}>
+              {site.projectPage.readMore} →
+            </Link>
+          )}
+          <ProjectLinks project={project} />
+        </div>
       </div>
     </article>
   )

@@ -214,3 +214,44 @@ npm now asks before running a package's install script. content-collections depe
 Section titles, notes and link labels live in `content/home.ts` with the hero copy.
 
 `grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr))` means "as many columns of at least 320px as fit". `auto-fill` keeps empty column slots, so a single card stays card-sized instead of stretching across the page. The `min(100%, …)` stops a 320px minimum overflowing on very narrow screens.
+
+## 6. Project pages, Markdown and the 404 page (17 Oct 2026)
+
+### A page exists when there's a write-up
+
+The body of a project's Markdown file (everything after the frontmatter) is its write-up. The content-collections `transform` now:
+
+- compiles that Markdown to HTML at build time (`compileMarkdown` from `@content-collections/markdown`, which uses remark under the hood and caches the result)
+- sets `hasPage` to whether the body has any text
+- drops the raw Markdown, since only the HTML is needed and anything kept ships in the JavaScript bundle
+
+So giving a project a page is writing its body. The cards show "Read the write-up →" and link the title only when `hasPage` is true. Tinkering and archive projects have no body, so no page.
+
+### The dynamic route
+
+`site/src/routes/projects/$slug.tsx` is one route for every project. The `$` makes `slug` a **path parameter**: `/projects/yggdramor` gives `params.slug === 'yggdramor'`.
+
+- **`loader`** runs before the page renders: at build time while prerendering, and in the browser on client-side navigation. It looks up the project with `findProjectPage`; if there isn't one, it `throw notFound()`, which makes the router render the root's `notFoundComponent` instead
+- **`head`** receives the loader's data, so each project page gets its own `<title>`, `description` and Open Graph tags. `HeadContent` merges route heads and the deepest route wins, so there's one description per page, not two
+- **`Route.useLoaderData()`** in the component reads what the loader returned, fully typed
+
+### How the project pages get prerendered
+
+Routes with a parameter can't be discovered automatically: the build can't guess slugs. They're found by **crawling**. The prerenderer renders `/`, sees `<a href="/projects/yggdramor">` on the cards, and renders that too. A project with a write-up but no link from anywhere wouldn't get a page, which is fine because every page-worthy project is on the home page.
+
+The build log lists them: `/`, `/about`, `/projects/uk-grid-tracker`, `/projects/yggdramor`, `/projects/portfolio`.
+
+### Rendering the HTML
+
+`Prose` puts the compiled HTML in the page with `dangerouslySetInnerHTML`. React names it that because injecting HTML from an untrusted source is how cross-site scripting happens. Here the HTML comes from Markdown files in this repo, compiled at build time, so it's as trusted as the components themselves.
+
+Styling it is a CSS Modules wrinkle: the `<h2>`s and `<p>`s inside come from Markdown, so they have no module class names. `.prose :global(h2)` means "an `h2` anywhere inside the scoped `.prose` element". The outer class stays scoped and only the inner element selector is global.
+
+### Shared pieces
+
+Now that the home page and project pages both show stack tags and links, `StackTags` and `ProjectLinks` moved to `components/ui/`, and the link labels moved to `content/site.ts`. Following the folder rule: code lives with its only user until a second one appears.
+
+### Two things worth knowing
+
+- **Links work before JavaScript.** A click on a project link before React has hydrated is a normal full page load of the prerendered HTML. After hydration the router intercepts clicks and swaps the page in the browser. Both end up in the same place
+- **`routeTree.gen.ts` lags behind new route files** until `dev` or `build` runs the router plugin. Adding `$slug.tsx` and running `check` straight away gave type errors that `/projects/$slug` didn't exist; after a build regenerated the tree, they went away. Commit the regenerated file with the new route

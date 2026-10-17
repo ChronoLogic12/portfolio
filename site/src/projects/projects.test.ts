@@ -1,8 +1,9 @@
 import type { Project } from 'content-collections'
 import { describe, expect, it } from 'vitest'
-import { projectsIn } from './projects'
+import { findProjectPage, projectsIn } from './projects'
 
-const project = (slug: string, section: Project['section'], order: number) => ({ slug, section, order }) as Project
+const project = (slug: string, section: Project['section'], order: number, hasPage = false) =>
+  ({ slug, section, order, hasPage }) as Project
 
 describe('projectsIn', () => {
   const projects = [
@@ -23,5 +24,21 @@ describe('projectsIn', () => {
 
   it('reads the real content when no list is given', () => {
     expect(projectsIn('featured').length).toBeGreaterThan(0)
+  })
+})
+
+describe('findProjectPage', () => {
+  const projects = [project('written-up', 'featured', 1, true), project('no-write-up', 'tinkering', 1)]
+
+  it('finds a project that has a write-up', () => {
+    expect(findProjectPage('written-up', projects)?.slug).toBe('written-up')
+  })
+
+  it('treats a project without a write-up as having no page', () => {
+    expect(findProjectPage('no-write-up', projects)).toBeUndefined()
+  })
+
+  it('returns nothing for an unknown slug', () => {
+    expect(findProjectPage('missing', projects)).toBeUndefined()
   })
 })

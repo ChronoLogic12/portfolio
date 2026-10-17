@@ -14,6 +14,7 @@ export interface ProfileLink {
 export const site = {
   name: 'Matthew Suttie',
   role: 'Software developer',
+  description: 'Matthew Suttie, software developer in the UK. Projects in TypeScript, React and AWS.',
   nav: [
     { label: 'Projects', to: '/', hash: 'projects' },
     { label: 'About', to: '/about' },
@@ -22,4 +23,18 @@ export const site = {
     { label: 'GitHub', href: 'https://github.com/ChronoLogic12' },
     { label: 'LinkedIn', href: 'https://www.linkedin.com/in/matthew-suttie-756191212/' },
   ] satisfies ProfileLink[],
+  projectLinks: {
+    live: 'Live site',
+    repo: 'Code',
+  },
+  projectPage: {
+    readMore: 'Read the write-up',
+    back: 'All projects',
+    builtWith: 'Built with',
+  },
+  notFound: {
+    title: 'Page not found',
+    message: "There's nothing at this address. It may have moved, or never existed.",
+    action: 'Back to the home page',
+  },
 }

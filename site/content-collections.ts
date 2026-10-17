@@ -1,4 +1,5 @@
 import { defineCollection, defineConfig } from '@content-collections/core'
+import { compileMarkdown } from '@content-collections/markdown'
 import { z } from 'zod'
 
 const projects = defineCollection({
@@ -21,10 +22,15 @@ const projects = defineCollection({
       .default({}),
     content: z.string(),
   }),
-  transform: (project) => ({
-    ...project,
-    slug: project._meta.path,
-  }),
+  transform: async (project, context) => {
+    const { content, ...rest } = project
+    return {
+      ...rest,
+      slug: project._meta.path,
+      hasPage: content.trim().length > 0,
+      html: await compileMarkdown(context, project),
+    }
+  },
 })
 
 export default defineConfig({
