@@ -23,6 +23,7 @@ describe('SiteStack', () => {
     const stack = new SiteStack(app, 'PortfolioSite', {
       env: { account: '111111111111', region: 'eu-west-2' },
       distDir: fakeBuild(),
+      webAclArn: 'arn:aws:wafv2:us-east-1:111111111111:global/webacl/CreatedByCloudFront-test/abc',
     })
     template = Template.fromStack(stack)
   })
@@ -58,6 +59,14 @@ describe('SiteStack', () => {
       }),
     })
     template.resourceCountIs('AWS::CloudFront::Function', 1)
+  })
+
+  it('keeps the Free plan web ACL attached', () => {
+    template.hasResourceProperties('AWS::CloudFront::Distribution', {
+      DistributionConfig: Match.objectLike({
+        WebACLId: 'arn:aws:wafv2:us-east-1:111111111111:global/webacl/CreatedByCloudFront-test/abc',
+      }),
+    })
   })
 
   it('shows the prerendered 404 page, with a 404 status, for missing files', () => {

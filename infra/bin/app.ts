@@ -14,7 +14,12 @@ const env = {
   region: process.env.CDK_DEFAULT_REGION ?? 'eu-west-2',
 }
 
-new SiteStack(app, 'PortfolioSite', { env, distDir })
+new SiteStack(app, 'PortfolioSite', {
+  env,
+  distDir,
+  webAclArn:
+    'arn:aws:wafv2:us-east-1:797286749899:global/webacl/CreatedByCloudFront-7d129ac6/da2f76d3-7835-48f8-9eab-ab13e3d0ea6c',
+})
 new GitHubDeployStack(app, 'PortfolioGitHubDeploy', { env, repository: REPOSITORY, branch: DEPLOY_BRANCH })
 
 Tags.of(app).add('project', 'portfolio')

@@ -11,10 +11,11 @@ import { ROLE_BOUNDARY_NAME } from './project'
 
 export interface SiteStackProps extends StackProps {
   distDir: string
+  webAclArn?: string
 }
 
 export class SiteStack extends Stack {
-  constructor(scope: Construct, id: string, { distDir, ...props }: SiteStackProps) {
+  constructor(scope: Construct, id: string, { distDir, webAclArn, ...props }: SiteStackProps) {
     super(scope, id, props)
     iam.PermissionsBoundary.of(this).apply(
       iam.ManagedPolicy.fromManagedPolicyName(this, 'RoleBoundary', ROLE_BOUNDARY_NAME),
@@ -36,6 +37,7 @@ export class SiteStack extends Stack {
 
     const distribution = new cloudfront.Distribution(this, 'Distribution', {
       comment: 'matthewsuttie.com portfolio',
+      webAclId: webAclArn,
       defaultRootObject: 'index.html',
       httpVersion: cloudfront.HttpVersion.HTTP2_AND_3,
       priceClass: cloudfront.PriceClass.PRICE_CLASS_ALL,
