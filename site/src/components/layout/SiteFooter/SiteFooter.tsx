@@ -1,6 +1,5 @@
 import { site } from '../../../content/site'
 import { ExternalLink } from '../../ui/ExternalLink/ExternalLink'
-import { Logo } from '../../ui/Logo/Logo'
 import { Container } from '../Container/Container'
 import styles from './SiteFooter.module.css'
 
@@ -10,7 +9,7 @@ export function SiteFooter() {
       <Container>
         <div className={styles.bar}>
           <span className={styles.name}>
-            <Logo size={20} />
+            <img src="/favicon.png" width={20} height={20} alt="" />
             {site.name}
           </span>
           <ul className={styles.links}>

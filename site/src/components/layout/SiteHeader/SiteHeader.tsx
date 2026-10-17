@@ -1,6 +1,5 @@
 import { Link } from '@tanstack/react-router'
 import { site } from '../../../content/site'
-import { Logo } from '../../ui/Logo/Logo'
 import { Container } from '../Container/Container'
 import styles from './SiteHeader.module.css'
 
@@ -10,7 +9,6 @@ export function SiteHeader() {
       <Container>
         <div className={styles.bar}>
           <Link to="/" className={styles.brand}>
-            <Logo />
             {site.name}
           </Link>
           <nav aria-label="Main">
