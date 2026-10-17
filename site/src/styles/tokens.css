@@ -1,5 +1,4 @@
 @import '@radix-ui/colors/slate-dark.css';
-@import '@radix-ui/colors/teal-dark.css';
 
 :root {
   color-scheme: dark;
@@ -14,10 +13,13 @@
   --text-muted: var(--slate-11);
   --text-faint: var(--slate-10);
 
-  --accent: var(--teal-11);
-  --accent-solid: var(--teal-9);
-  --accent-subtle: var(--teal-3);
-  --accent-border: var(--teal-7);
+  --brand-arc: #41aea9;
+  --brand-ray: #a6f6f1;
+
+  --accent: var(--brand-ray);
+  --accent-solid: var(--brand-arc);
+  --accent-subtle: color-mix(in srgb, var(--brand-arc) 14%, var(--bg));
+  --accent-border: color-mix(in srgb, var(--brand-arc) 55%, var(--bg));
   --on-accent: #04120f;
 
   --grid-line: var(--slate-3);

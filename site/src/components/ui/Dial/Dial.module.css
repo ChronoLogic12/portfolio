@@ -4,17 +4,10 @@
 }
 
 .arc {
-  fill: none;
-  stroke: var(--accent-solid);
-  stroke-width: 7;
-  stroke-linecap: round;
   animation: breathe var(--sweep-duration) ease-in-out infinite;
 }
 
 .ray {
-  stroke: var(--accent);
-  stroke-width: 3;
-  stroke-linecap: round;
   animation: sweep var(--sweep-duration) linear infinite both;
   animation-delay: calc(var(--step) * var(--step-duration));
 }
@@ -23,7 +16,7 @@
   0%,
   30%,
   100% {
-    opacity: 0.25;
+    opacity: 0.3;
   }
 
   6% {
@@ -33,7 +26,7 @@
 
 @keyframes breathe {
   50% {
-    opacity: 0.6;
+    opacity: 0.65;
   }
 }
 
@@ -41,9 +34,5 @@
   .arc,
   .ray {
     animation: none;
-  }
-
-  .ray {
-    opacity: var(--resting-opacity);
   }
 }
