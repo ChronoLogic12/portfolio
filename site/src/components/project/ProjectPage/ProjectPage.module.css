@@ -55,3 +55,11 @@
   gap: var(--space-4);
   margin-top: var(--space-2);
 }
+
+.cover {
+  overflow: hidden;
+  margin-bottom: var(--space-7);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  aspect-ratio: 16 / 10;
+}

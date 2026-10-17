@@ -2,6 +2,7 @@ import contentCollections from '@content-collections/vite'
 import { defineConfig } from 'vite'
 import { tanstackStart } from '@tanstack/react-start/plugin/vite'
 import viteReact from '@vitejs/plugin-react'
+import { imagetools } from 'vite-imagetools'
 
 export default defineConfig({
   server: {
@@ -12,6 +13,7 @@ export default defineConfig({
   },
   plugins: [
     contentCollections(),
+    imagetools(),
     tanstackStart({
       prerender: {
         enabled: true,

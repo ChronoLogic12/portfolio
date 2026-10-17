@@ -20,6 +20,7 @@ const projects = defineCollection({
         repo: z.url().optional(),
       })
       .default({}),
+    screenshot: z.url().optional(),
     content: z.string(),
   }),
   transform: async (project, context) => {

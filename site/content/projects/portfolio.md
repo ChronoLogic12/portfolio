@@ -5,6 +5,7 @@ year: 2026
 section: featured
 order: 3
 stack: [TanStack Start, React, TypeScript, AWS CDK]
+screenshot: http://localhost:4174/
 links:
   repo: https://github.com/ChronoLogic12/portfolio
 ---

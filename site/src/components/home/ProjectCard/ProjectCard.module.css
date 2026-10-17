@@ -16,13 +16,15 @@
   transform: translateY(-2px);
 }
 
-.wide {
+.card.wide {
   display: grid;
   grid-template-columns: 1.3fr 1fr;
-  grid-column: 1 / -1;
+  flex-basis: 100%;
 }
 
 .cover {
+  overflow: hidden;
+  max-height: 340px;
   display: grid;
   place-items: center;
   aspect-ratio: 16 / 10;
@@ -36,7 +38,8 @@
 }
 
 .wide .cover {
-  aspect-ratio: auto;
+  aspect-ratio: 16 / 10;
+  max-height: none;
   min-height: 300px;
   border-bottom: 0;
   border-right: 1px solid var(--border);

@@ -74,7 +74,7 @@ Project cards in a grid rather than a homepage carousel: a carousel hides all bu
 | Green Lawns Kennels | other   | Live client site       | Featured. Description needs confirming                            |
 | daisy-reverb        | private | Hardware/firmware      | Tinkering. AI-assisted experiments, not a focus                   |
 | pico-2-clock        | public  | Hardware               | Tinkering                                                         |
-| BookMarks           | public  | Live on Render         | Archive                                                           |
+| BookMarks           | public  | Live on Render         | Featured, fourth. Live and updated in 2026                        |
 | Yggdramor (dnd-5e)  | public  | Live on Netlify        | Featured. Still in use; may want some polish                      |
 | EDF6 countdown      | public  | Live on Netlify        | Archive                                                           |
 | Spaceman, Volume    | public  | Live on GitHub Pages   | Archive                                                           |
@@ -101,7 +101,8 @@ No email on the domain, so the only risk is a few minutes of mixed DNS answers.
    - Done: project content collection (14 projects, zod-validated), Selected work, Tinkering and Archive sections
    - Done: project pages (`/projects/$slug`) for any project with a Markdown write-up, starter write-ups for the three featured projects, 404 page, per-page titles and descriptions
    - Done: favicon and app icons generated from the logo geometry, web manifest, CI workflow (format, lint, typecheck, test, build)
-   - Next: About page (needs Matthew's input), CV, project cover images and Open Graph image. Write-up prose needs a pass from Matthew
+   - Done: real ChronoLogic logo and colours, no site header (name in the hero), clock-hand dial, unavailable CV button with tooltip, BookMarks featured, cover screenshots (`npm run screenshots`) optimised to AVIF and WebP at build time
+   - Next: Open Graph image, About section (needs Matthew), mobile pass, then the AWS infrastructure. Write-up prose needs a pass from Matthew
 2. **Design:** sketch home and one project page; agree the look before building out
 3. **Content:** About text, updated CV, write-ups for featured projects, screenshots
 4. **Infra:** CDK stack, cert, hosted zone, deploy role; deploy to the CloudFront address
@@ -117,6 +118,9 @@ Understanding the code matters as much as shipping it. So:
 - Stop and check understanding before moving to the next phase
 
 ## Later
+
+- Mobile pass: check every page at phone widths (hero, dial, cards, archive rows, project pages) and fix what doesn't work
+- Headline colour: try a brighter take on the arc teal for the name
 
 - Email on the domain: how it works (MX records, SPF/DKIM/DMARC), options (SES receiving, forwarding services, Workspace) and cost
 - Revive Tippy; polish mortgage-tracker for hosting

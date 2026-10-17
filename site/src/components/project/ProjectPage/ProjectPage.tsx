@@ -1,13 +1,17 @@
 import { Link } from '@tanstack/react-router'
 import type { Project } from 'content-collections'
 import { site } from '../../../content/site'
+import { projectCover } from '../../../projects/covers'
 import { Container } from '../../layout/Container/Container'
+import { ProjectCover } from '../../ui/ProjectCover/ProjectCover'
 import { ProjectLinks } from '../../ui/ProjectLinks/ProjectLinks'
 import { StackTags } from '../../ui/StackTags/StackTags'
 import { Prose } from '../Prose/Prose'
 import styles from './ProjectPage.module.css'
 
 export function ProjectPage({ project }: { project: Project }) {
+  const cover = projectCover(project.slug)
+
   return (
     <article className={styles.page}>
       <Container>
@@ -27,6 +31,16 @@ export function ProjectPage({ project }: { project: Project }) {
               <ProjectLinks project={project} />
             </div>
           </header>
+          {cover && (
+            <div className={styles.cover}>
+              <ProjectCover
+                picture={cover}
+                alt={`Screenshot of ${project.title}`}
+                sizes="(max-width: 760px) 100vw, 72ch"
+                priority
+              />
+            </div>
+          )}
           <Prose html={project.html} />
         </div>
       </Container>

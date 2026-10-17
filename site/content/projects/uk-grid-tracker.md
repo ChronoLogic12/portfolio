@@ -5,6 +5,7 @@ year: 2026
 section: featured
 order: 1
 stack: [React, TypeScript, visx, TanStack, AWS CDK, Lambda, CloudFront]
+screenshot: https://gridtracker.uk/
 links:
   live: https://gridtracker.uk
 ---

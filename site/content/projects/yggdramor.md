@@ -5,6 +5,7 @@ year: 2024
 section: featured
 order: 2
 stack: [React, React Router, webpack, Jest, Open5e API]
+screenshot: https://yggdramor.netlify.app/spells
 links:
   live: https://yggdramor.netlify.app/
   repo: https://github.com/ChronoLogic12/dnd-5e
