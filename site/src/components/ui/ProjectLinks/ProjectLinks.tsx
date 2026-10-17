@@ -1,5 +1,6 @@
 import type { Project } from 'content-collections'
 import { site } from '../../../content/site'
+import { isGitHub } from '../../../utils/isGitHub/isGitHub'
 import { buttonClass } from '../Button/buttonClass'
 import { ExternalLink } from '../ExternalLink/ExternalLink'
 import { GitHubIcon } from '../icons/GitHubIcon'
@@ -9,8 +10,6 @@ interface ProjectLinksProps {
   project: Project
   size?: 'default' | 'small'
 }
-
-const isGitHub = (url: string) => new URL(url).hostname === 'github.com'
 
 export function ProjectLinks({ project, size = 'small' }: ProjectLinksProps) {
   const { live, repo } = project.links

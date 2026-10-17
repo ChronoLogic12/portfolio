@@ -5,8 +5,10 @@ import { Container } from '../../layout/Container/Container'
 import { buttonClass } from '../../ui/Button/buttonClass'
 import { Dial } from '../../ui/Dial/Dial'
 import { ExternalLink } from '../../ui/ExternalLink/ExternalLink'
+import { GitHubIcon } from '../../ui/icons/GitHubIcon'
 import { Tooltip } from '../../ui/Tooltip/Tooltip'
 import { usePointerTracking } from '../../../hooks/usePointerTracking/usePointerTracking'
+import { isGitHub } from '../../../utils/isGitHub/isGitHub'
 import styles from './Hero.module.css'
 
 export function Hero() {
@@ -34,6 +36,7 @@ export function Hero() {
               {site.profiles.map((profile) => (
                 <li key={profile.label}>
                   <ExternalLink href={profile.href} className={buttonClass()}>
+                    {isGitHub(profile.href) && <GitHubIcon />}
                     {profile.label}
                   </ExternalLink>
                 </li>
