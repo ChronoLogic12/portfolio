@@ -1,40 +1,59 @@
+@property --hand-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
 .dial {
-  --sweep-duration: 7s;
-  --step-duration: calc(var(--sweep-duration) / 7);
+  --sweep-duration: 8s;
+  --trail: 75deg;
+
+  display: grid;
 }
 
-.arc {
-  animation: breathe var(--sweep-duration) ease-in-out infinite;
+.face,
+.hand {
+  grid-area: 1 / 1;
+  width: 100%;
+  height: auto;
 }
 
-.ray {
-  animation: sweep var(--sweep-duration) ease-out infinite both;
-  animation-delay: calc(var(--step) * var(--step-duration));
+.face {
+  opacity: 0.7;
 }
 
-@keyframes sweep {
-  0%,
-  30%,
-  100% {
-    opacity: calc(var(--resting-opacity) * 0.7);
-    stroke-width: 1.16px;
-  }
-
-  5% {
-    opacity: 1;
-    stroke-width: 2.2px;
-  }
+.hand {
+  mask-image: conic-gradient(
+    from calc(var(--hand-angle) - var(--trail)),
+    transparent 0deg,
+    #000 var(--trail),
+    transparent calc(var(--trail) + 0.5deg)
+  );
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--brand-ray) 45%, transparent));
+  animation: hand var(--sweep-duration) linear infinite;
 }
 
-@keyframes breathe {
-  50% {
-    opacity: 0.75;
+.handArc {
+  stroke: var(--brand-ray);
+}
+
+.handRay {
+  opacity: 1;
+  stroke-width: 1.8px;
+}
+
+@keyframes hand {
+  to {
+    --hand-angle: 360deg;
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .arc,
-  .ray {
-    animation: none;
+  .face {
+    opacity: 1;
+  }
+
+  .hand {
+    display: none;
   }
 }

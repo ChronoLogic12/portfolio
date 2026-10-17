@@ -3,11 +3,9 @@ import styles from './Dial.module.css'
 
 export function Dial({ className }: { className?: string }) {
   return (
-    <Mark
-      className={[styles.dial, className].filter(Boolean).join(' ')}
-      arcClassName={styles.arc}
-      rayClassName={styles.ray}
-      disc={false}
-    />
+    <div className={[styles.dial, className].filter(Boolean).join(' ')} aria-hidden="true">
+      <Mark className={styles.face} disc={false} />
+      <Mark className={styles.hand} arcClassName={styles.handArc} rayClassName={styles.handRay} disc={false} />
+    </div>
   )
 }

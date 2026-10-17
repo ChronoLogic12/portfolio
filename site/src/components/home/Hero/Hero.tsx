@@ -8,7 +8,7 @@ import { usePointerTracking } from '../../../hooks/usePointerTracking/usePointer
 import styles from './Hero.module.css'
 
 export function Hero() {
-  const { eyebrow, headline, intro, primaryAction } = home.hero
+  const { eyebrow, tagline, intro, primaryAction } = home.hero
   const heroRef = usePointerTracking<HTMLElement>()
 
   return (
@@ -19,7 +19,9 @@ export function Hero() {
         <div className={styles.layout}>
           <div>
             <p className={styles.eyebrow}>{eyebrow}</p>
-            <h1 className={styles.headline}>{headline}</h1>
+            <h1 className={styles.headline}>
+              {site.name}. <span className={styles.tagline}>{tagline}</span>
+            </h1>
             <p className={styles.intro}>{intro}</p>
             <ul className={styles.actions}>
               <li>

@@ -42,7 +42,7 @@ Direction A, "Instrument", chosen 16 Oct 2026. Sketch: `design/directions.html` 
 - **Palette:** near-black `#0c0d0f` background, Radix slate for surfaces, borders and text, Radix teal as the one accent (teal-9 fills, teal-11 text and lines). Teal ties together the logo, grid tracker and this site
 - **Type:** Inter for everything; JetBrains Mono for small labels (eyebrow, section heads, tags, years)
 - **Layout:** wide max width (~1120px). Hero with intro and links on the left, the dial on the right. Selected work as a card grid with one wide featured card. Tinkering as small dashed rows. Archive as a plain list
-- **The ChronoLogic dial is the signature.** The logo's rays light up in turn like a clock hand sweeping round, and the arc slowly brightens and dims. Static under `prefers-reduced-motion`
+- **The ChronoLogic dial is the signature.** The logo (no disc) with a clock hand sweeping round it: a masked, brighter copy of the mark rotates with a fading trail, lighting the rays and then the arc. Static under `prefers-reduced-motion`. The disc is kept for the favicon and app icons
 - **Grid with a mouse glow:** faint grid lines behind the hero, faded at the edges. Under the mouse the lines (plus a very faint fill) light up teal in a ~220px circle. Mouse only; touch devices just see the static grid
 - **Not doing:** the blinking cursor (too much alongside the rest), the static glow. Possible later: a subtle cursor that types in the subheading
 
@@ -57,10 +57,10 @@ Content stays separate from layout so the prose and what appears where can chang
 
 ## Site shape (first version)
 
-- **Home:** name, one-line intro, short About, links (GitHub, LinkedIn, CV), then a grid of featured projects
+- **Home:** no site header. The hero carries the name, a one-line intro, links (projects, GitHub, LinkedIn) and the dial; then Selected work, Tinkering and Archive. About content (bio, CV) becomes a section on the home page, not a separate page
 - **Project pages** (`/projects/<slug>`): what it is, why I built it, how it works, stack, screenshots (Embla gallery), live and repo links
 - **Archive:** older projects as a compact list, no screenshots
-- **CV:** updated PDF, plus maybe an `/about` page with experience
+- **CV:** updated PDF, linked from the hero and the About section
 - 404 page
 
 Project cards in a grid rather than a homepage carousel: a carousel hides all but one project and looks dated. Embla still earns its place inside project pages.

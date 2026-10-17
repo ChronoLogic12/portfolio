@@ -1,4 +1,3 @@
-import type { CSSProperties } from 'react'
 import { MARK_ARC, MARK_COLOURS, MARK_DISC_RADIUS, MARK_RAYS, MARK_RAY_WIDTH, MARK_VIEW_BOX } from './markGeometry'
 
 interface MarkProps {
@@ -21,7 +20,7 @@ export function Mark({ className, arcClassName, rayClassName, size, disc = true 
         strokeWidth={MARK_ARC.width}
         strokeLinecap="round"
       />
-      {MARK_RAYS.map(({ opacity, ...line }, step) => (
+      {MARK_RAYS.map(({ opacity, ...line }) => (
         <line
           key={`${line.x2},${line.y2}`}
           className={rayClassName}
@@ -30,7 +29,6 @@ export function Mark({ className, arcClassName, rayClassName, size, disc = true 
           strokeWidth={MARK_RAY_WIDTH}
           strokeLinecap="round"
           opacity={opacity}
-          style={{ '--step': step, '--resting-opacity': opacity } as CSSProperties}
         />
       ))}
     </svg>
