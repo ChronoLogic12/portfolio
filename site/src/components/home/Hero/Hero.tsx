@@ -11,7 +11,7 @@ import { usePointerTracking } from '../../../hooks/usePointerTracking/usePointer
 import { isGitHub } from '../../../utils/isGitHub/isGitHub'
 import styles from './Hero.module.css'
 
-const GLOW_FOLLOW_RATE = 0.12
+const GLOW_FOLLOW_RATE = 0.25
 
 export function Hero() {
   const { eyebrow, tagline, intro, primaryAction } = home.hero
@@ -20,7 +20,9 @@ export function Hero() {
   return (
     <section ref={heroRef} className={styles.hero}>
       <div className={styles.grid} aria-hidden="true" />
+      <div className={styles.glowBloom} aria-hidden="true" />
       <div className={styles.glow} aria-hidden="true" />
+      <div className={styles.glowCore} aria-hidden="true" />
       <Container>
         <div className={styles.layout}>
           <div>

@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Glow lab</title>
+    <style>
+      :root {
+        --bg: #0c0d0f;
+        --grid-line: #212225;
+        --ray: #a6f6f1;
+        --arc: #41aea9;
+        --panel: #16171a;
+        --border: #2b2d31;
+        --text: #edeef0;
+        --muted: #9a9ca3;
+        color-scheme: dark;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+      }
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: ui-sans-serif, system-ui, 'Segoe UI', sans-serif;
+        display: grid;
+        grid-template-columns: 1fr 340px;
+        min-height: 100vh;
+      }
+
+      .stage {
+        --grid-size: 48px;
+        --grid-fade: linear-gradient(to bottom, #000 0%, #000 50%, transparent 100%);
+        position: relative;
+        isolation: isolate;
+        overflow: clip;
+        min-height: 100vh;
+        padding: 96px 64px;
+      }
+      .layer {
+        position: absolute;
+        inset: 0;
+        z-index: -1;
+        pointer-events: none;
+        background-image:
+          linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
+        background-size: var(--grid-size) var(--grid-size);
+        background-position: center top;
+      }
+      .grid {
+        --line: var(--grid-line);
+        mask-image: var(--grid-fade);
+      }
+      .lit {
+        mask-composite: intersect;
+        opacity: 0;
+        transition: opacity 0.4s ease;
+      }
+      .stage[data-pointer='inside'] .lit {
+        opacity: 1;
+      }
+      .stage h1 {
+        font-size: 64px;
+        line-height: 1.02;
+        letter-spacing: -0.035em;
+        max-width: 12ch;
+      }
+      .stage h1 span {
+        color: #b0b4ba;
+      }
+      .stage p {
+        margin-top: 20px;
+        max-width: 52ch;
+        color: #b0b4ba;
+        font-size: 18px;
+        line-height: 1.6;
+      }
+      .hint {
+        position: absolute;
+        bottom: 24px;
+        left: 64px;
+        font-size: 13px;
+        color: var(--muted);
+      }
+
+      aside {
+        border-left: 1px solid var(--border);
+        background: var(--panel);
+        padding: 20px;
+        overflow-y: auto;
+        height: 100vh;
+        position: sticky;
+        top: 0;
+        font-size: 13px;
+      }
+      aside h2 {
+        font-size: 12px;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin: 20px 0 10px;
+      }
+      aside h2:first-child {
+        margin-top: 0;
+      }
+      .presets {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      button {
+        font: inherit;
+        color: var(--text);
+        background: #222327;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 6px 10px;
+        cursor: pointer;
+      }
+      button:hover {
+        border-color: #44474d;
+      }
+      label {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 4px 8px;
+        margin-bottom: 12px;
+      }
+      label small {
+        grid-column: 1 / -1;
+        color: var(--muted);
+        line-height: 1.4;
+      }
+      label output {
+        font-family: ui-monospace, monospace;
+        color: var(--ray);
+      }
+      input[type='range'] {
+        grid-column: 1 / -1;
+        width: 100%;
+        accent-color: var(--arc);
+      }
+      pre {
+        white-space: pre-wrap;
+        font-family: ui-monospace, monospace;
+        font-size: 11px;
+        background: #0f1012;
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        padding: 10px;
+        color: #cfd2d6;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="stage" id="stage">
+      <div class="layer grid"></div>
+      <div class="layer lit" id="halo"></div>
+      <div class="layer lit" id="glow"></div>
+      <div class="layer lit" id="core"></div>
+      <h1>Matthew Suttie. <span>I build things for the web.</span></h1>
+      <p>
+        Move the mouse around this side. The panel on the right changes the light; values update as you drag. Presets
+        load the versions we've tried so far.
+      </p>
+      <p class="hint">Glow lab · not part of the site build</p>
+    </main>
+
+    <aside>
+      <h2>Presets</h2>
+      <div class="presets" id="presets"></div>
+
+      <h2>Movement</h2>
+      <label
+        >Follow rate <output data-for="follow"></output>
+        <input type="range" id="follow" min="0.04" max="1" step="0.01" />
+        <small>Share of the gap closed per frame. 1 = locked to the cursor, lower = more lag.</small>
+      </label>
+
+      <h2>Lit lines</h2>
+      <label
+        >Reach (px) <output data-for="reach"></output>
+        <input type="range" id="reach" min="60" max="420" step="5" />
+      </label>
+      <label
+        >Line strength (%) <output data-for="lineStrength"></output>
+        <input type="range" id="lineStrength" min="0" max="100" step="1" />
+      </label>
+      <label
+        >Fade speed <output data-for="fade"></output>
+        <input type="range" id="fade" min="1" max="6" step="0.1" />
+        <small>Higher drops off faster near the cursor, then trails gently.</small>
+      </label>
+
+      <h2>Bright core</h2>
+      <label
+        >Core radius (px) <output data-for="coreRadius"></output>
+        <input type="range" id="coreRadius" min="0" max="160" step="2" />
+      </label>
+      <label
+        >Core whiteness (%) <output data-for="coreWhite"></output>
+        <input type="range" id="coreWhite" min="0" max="100" step="1" />
+      </label>
+
+      <h2>Glow around the lines</h2>
+      <label
+        >Bloom blur (px) <output data-for="bloomBlur"></output>
+        <input type="range" id="bloomBlur" min="0" max="10" step="0.5" />
+        <small>A soft halo spreading off the lit lines.</small>
+      </label>
+      <label
+        >Bloom strength (%) <output data-for="bloomStrength"></output>
+        <input type="range" id="bloomStrength" min="0" max="100" step="1" />
+      </label>
+      <label
+        >Surface wash (%) <output data-for="wash"></output>
+        <input type="range" id="wash" min="0" max="15" step="0.5" />
+        <small>Faint fill across the grid squares under the light.</small>
+      </label>
+
+      <h2>Values</h2>
+      <pre id="values"></pre>
+    </aside>
+
+    <script>
+      const PRESETS = {
+        'v1 first glow': {
+          follow: 1,
+          reach: 220,
+          lineStrength: 100,
+          fade: 1,
+          coreRadius: 0,
+          coreWhite: 0,
+          bloomBlur: 0,
+          bloomStrength: 0,
+          wash: 4,
+        },
+        'v3 you liked': {
+          follow: 0.12,
+          reach: 200,
+          lineStrength: 100,
+          fade: 3.4,
+          coreRadius: 70,
+          coreWhite: 45,
+          bloomBlur: 0,
+          bloomStrength: 0,
+          wash: 0,
+        },
+        'v4 dimmer lines': {
+          follow: 0.12,
+          reach: 200,
+          lineStrength: 65,
+          fade: 3.4,
+          coreRadius: 70,
+          coreWhite: 45,
+          bloomBlur: 0,
+          bloomStrength: 0,
+          wash: 0,
+        },
+        'Soft bloom': {
+          follow: 0.25,
+          reach: 200,
+          lineStrength: 100,
+          fade: 3.4,
+          coreRadius: 70,
+          coreWhite: 45,
+          bloomBlur: 3,
+          bloomStrength: 35,
+          wash: 0,
+        },
+        'No lag': {
+          follow: 1,
+          reach: 200,
+          lineStrength: 100,
+          fade: 3.4,
+          coreRadius: 70,
+          coreWhite: 45,
+          bloomBlur: 0,
+          bloomStrength: 0,
+          wash: 0,
+        },
+      }
+
+      const stage = document.getElementById('stage')
+      const glow = document.getElementById('glow')
+      const core = document.getElementById('core')
+      const halo = document.getElementById('halo')
+      const inputs = [...document.querySelectorAll('aside input')]
+      const settings = {}
+
+      const curveMask = (radius, power) => {
+        const stops = []
+        for (let i = 0; i <= 10; i++) {
+          const t = i / 10
+          stops.push(`rgb(0 0 0 / ${((1 - t) ** power).toFixed(3)}) ${t * 100}%`)
+        }
+        return `radial-gradient(${radius}px circle at var(--x) var(--y), ${stops.join(', ')}), var(--grid-fade)`
+      }
+
+      const mix = (colour, percent, other = 'transparent') => `color-mix(in srgb, ${colour} ${percent}%, ${other})`
+
+      const apply = () => {
+        const s = settings
+        glow.style.setProperty('--line', mix('var(--ray)', s.lineStrength))
+        glow.style.backgroundColor = mix('var(--arc)', s.wash)
+        glow.style.maskImage = curveMask(s.reach, s.fade)
+        core.style.setProperty('--line', mix('white', s.coreWhite, 'var(--ray)'))
+        core.style.maskImage = curveMask(Math.max(s.coreRadius, 1), 2.1)
+        core.style.display = s.coreRadius ? '' : 'none'
+        halo.style.setProperty('--line', mix('var(--ray)', s.bloomStrength))
+        halo.style.filter = `blur(${s.bloomBlur}px)`
+        halo.style.maskImage = curveMask(s.reach, s.fade)
+        halo.style.display = s.bloomBlur && s.bloomStrength ? '' : 'none'
+        for (const input of inputs) {
+          document.querySelector(`output[data-for="${input.id}"]`).textContent = input.value
+        }
+        document.getElementById('values').textContent = Object.entries(s)
+          .map(([key, value]) => `${key}: ${value}`)
+          .join('\n')
+      }
+
+      const load = (preset) => {
+        for (const input of inputs) {
+          input.value = preset[input.id]
+          settings[input.id] = Number(input.value)
+        }
+        apply()
+      }
+
+      for (const input of inputs) {
+        input.addEventListener('input', () => {
+          settings[input.id] = Number(input.value)
+          apply()
+        })
+      }
+
+      const presetBox = document.getElementById('presets')
+      for (const [name, preset] of Object.entries(PRESETS)) {
+        const button = document.createElement('button')
+        button.textContent = name
+        button.addEventListener('click', () => load(preset))
+        presetBox.append(button)
+      }
+
+      let target = null
+      let current = null
+      let frame = 0
+      let last = 0
+      const write = ({ x, y }) => {
+        stage.style.setProperty('--x', `${x}px`)
+        stage.style.setProperty('--y', `${y}px`)
+      }
+      const render = (time) => {
+        if (!target) return (frame = 0)
+        const elapsed = last ? time - last : 16.7
+        last = time
+        const share = 1 - (1 - settings.follow) ** (elapsed / 16.7)
+        current = current
+          ? { x: current.x + (target.x - current.x) * share, y: current.y + (target.y - current.y) * share }
+          : target
+        write(current)
+        if (Math.abs(target.x - current.x) < 0.5 && Math.abs(target.y - current.y) < 0.5) {
+          write(target)
+          current = target
+          frame = 0
+          last = 0
+          return
+        }
+        frame = requestAnimationFrame(render)
+      }
+      stage.addEventListener('pointermove', (event) => {
+        const box = stage.getBoundingClientRect()
+        target = { x: event.clientX - box.left, y: event.clientY - box.top }
+        stage.dataset.pointer = 'inside'
+        if (!frame) frame = requestAnimationFrame(render)
+      })
+      stage.addEventListener('pointerleave', () => {
+        cancelAnimationFrame(frame)
+        frame = 0
+        last = 0
+        target = null
+        current = null
+        delete stage.dataset.pointer
+      })
+
+      load(PRESETS['v3 you liked'])
+    </script>
+  </body>
+</html>

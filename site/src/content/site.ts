@@ -13,7 +13,8 @@ export const site = {
   ] satisfies ProfileLink[],
   cv: {
     label: 'CV',
-    unavailable: "My CV isn't on the site yet. If you'd like a copy, get in touch on LinkedIn.",
+    unavailable:
+      "An up to date version of my CV isn't currently available. If you would like any additional information please get in touch with me on LinkedIn.",
   },
   projectLinks: {
     live: 'Live site',

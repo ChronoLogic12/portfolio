@@ -1,7 +1,33 @@
 .hero {
   --grid-size: 48px;
-  --grid-fade: radial-gradient(70% 80% at 60% 40%, #000 30%, transparent 75%);
-  --glow-radius: 140px;
+  --grid-fade: linear-gradient(to bottom, #000 0%, #000 50%, transparent 100%);
+  --pointer: var(--pointer-x, 50%) var(--pointer-y, 50%);
+  --glow-falloff: radial-gradient(
+    300px circle at var(--pointer),
+    rgb(0 0 0 / 1) 0%,
+    rgb(0 0 0 / 0.629) 10%,
+    rgb(0 0 0 / 0.375) 20%,
+    rgb(0 0 0 / 0.208) 30%,
+    rgb(0 0 0 / 0.106) 40%,
+    rgb(0 0 0 / 0.047) 50%,
+    rgb(0 0 0 / 0.018) 60%,
+    rgb(0 0 0 / 0.005) 70%,
+    transparent 80%
+  );
+  --core-falloff: radial-gradient(
+    38px circle at var(--pointer),
+    rgb(0 0 0 / 1) 0%,
+    rgb(0 0 0 / 0.802) 10%,
+    rgb(0 0 0 / 0.626) 20%,
+    rgb(0 0 0 / 0.473) 30%,
+    rgb(0 0 0 / 0.342) 40%,
+    rgb(0 0 0 / 0.233) 50%,
+    rgb(0 0 0 / 0.146) 60%,
+    rgb(0 0 0 / 0.08) 70%,
+    rgb(0 0 0 / 0.034) 80%,
+    rgb(0 0 0 / 0.008) 90%,
+    transparent 100%
+  );
 
   position: relative;
   isolation: isolate;
@@ -10,7 +36,9 @@
 }
 
 .grid,
-.glow {
+.glowBloom,
+.glow,
+.glowCore {
   position: absolute;
   inset: 0;
   z-index: -1;
@@ -26,23 +54,33 @@
   mask-image: var(--grid-fade);
 }
 
-.glow {
-  --line: var(--accent);
-  background-color: color-mix(in srgb, var(--accent-solid) 7%, transparent);
-  mask-image:
-    radial-gradient(
-      var(--glow-radius) circle at var(--pointer-x, 50%) var(--pointer-y, 50%),
-      #000 0%,
-      rgb(0 0 0 / 0.45) 35%,
-      transparent 100%
-    ),
-    var(--grid-fade);
+.glowBloom,
+.glow,
+.glowCore {
   mask-composite: intersect;
   opacity: 0;
   transition: opacity 0.4s ease;
 }
 
-.hero[data-pointer='inside'] .glow {
+.glowBloom {
+  --line: color-mix(in srgb, var(--accent) 35%, transparent);
+  filter: blur(3px);
+  mask-image: var(--glow-falloff), var(--grid-fade);
+}
+
+.glow {
+  --line: var(--accent);
+  mask-image: var(--glow-falloff), var(--grid-fade);
+}
+
+.glowCore {
+  --line: color-mix(in srgb, white 92%, var(--brand-ray));
+  mask-image: var(--core-falloff), var(--grid-fade);
+}
+
+.hero[data-pointer='inside'] .glowBloom,
+.hero[data-pointer='inside'] .glow,
+.hero[data-pointer='inside'] .glowCore {
   opacity: 1;
 }
 

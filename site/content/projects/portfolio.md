@@ -1,5 +1,5 @@
 ---
-title: This site
+title: Personal portfolio (this site)
 summary: Prerendered to static HTML with TanStack Start and deployed to S3 and CloudFront with CDK.
 year: 2026
 section: featured
