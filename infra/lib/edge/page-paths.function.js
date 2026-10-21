@@ -1,3 +1,5 @@
+var SITE_HOST = '__SITE_HOST__'
+
 function queryString(querystring) {
   var parts = []
   for (var key in querystring) {
@@ -8,16 +10,21 @@ function queryString(querystring) {
   return parts.length ? '?' + parts.join('&') : ''
 }
 
+function redirect(location) {
+  return { statusCode: 301, statusDescription: 'Moved Permanently', headers: { location: { value: location } } }
+}
+
 function handler(event) {
   var request = event.request
   var uri = request.uri
+  var host = request.headers.host ? request.headers.host.value : SITE_HOST
+
+  if (host !== SITE_HOST) {
+    return redirect('https://' + SITE_HOST + uri + queryString(request.querystring))
+  }
 
   if (uri.length > 1 && uri.slice(-1) === '/') {
-    return {
-      statusCode: 301,
-      statusDescription: 'Moved Permanently',
-      headers: { location: { value: uri.slice(0, -1) + queryString(request.querystring) } },
-    }
+    return redirect(uri.slice(0, -1) + queryString(request.querystring))
   }
 
   if (uri === '/') {

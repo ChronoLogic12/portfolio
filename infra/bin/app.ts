@@ -3,6 +3,7 @@ import { existsSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { GitHubDeployStack } from '../lib/github-deploy-stack'
 import { DEPLOY_BRANCH, REPOSITORY } from '../lib/project'
+import { SITE_DOMAIN } from '../lib/site-domain'
 import { SiteStack } from '../lib/site-stack'
 
 const distDir = fileURLToPath(new URL('../../site/dist/client', import.meta.url))
@@ -17,6 +18,7 @@ const env = {
 new SiteStack(app, 'PortfolioSite', {
   env,
   distDir,
+  domain: SITE_DOMAIN,
   webAclArn:
     'arn:aws:wafv2:us-east-1:797286749899:global/webacl/CreatedByCloudFront-7d129ac6/da2f76d3-7835-48f8-9eab-ab13e3d0ea6c',
 })

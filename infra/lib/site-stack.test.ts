@@ -23,6 +23,11 @@ describe('SiteStack', () => {
     const stack = new SiteStack(app, 'PortfolioSite', {
       env: { account: '111111111111', region: 'eu-west-2' },
       distDir: fakeBuild(),
+      domain: {
+        name: 'example.com',
+        hostedZoneId: 'Z123',
+        certificateArn: 'arn:aws:acm:us-east-1:111111111111:certificate/abc',
+      },
       webAclArn: 'arn:aws:wafv2:us-east-1:111111111111:global/webacl/CreatedByCloudFront-test/abc',
     })
     template = Template.fromStack(stack)
@@ -59,6 +64,25 @@ describe('SiteStack', () => {
       }),
     })
     template.resourceCountIs('AWS::CloudFront::Function', 1)
+  })
+
+  it('serves the domain and www with the site certificate', () => {
+    template.hasResourceProperties('AWS::CloudFront::Distribution', {
+      DistributionConfig: Match.objectLike({
+        Aliases: ['example.com', 'www.example.com'],
+        ViewerCertificate: Match.objectLike({
+          AcmCertificateArn: 'arn:aws:acm:us-east-1:111111111111:certificate/abc',
+        }),
+      }),
+    })
+  })
+
+  it('points the domain and www at the distribution in the hosted zone, over IPv4 and IPv6', () => {
+    for (const Type of ['A', 'AAAA']) {
+      for (const Name of ['example.com.', 'www.example.com.']) {
+        template.hasResourceProperties('AWS::Route53::RecordSet', { HostedZoneId: 'Z123', Name, Type })
+      }
+    }
   })
 
   it('keeps the Free plan web ACL attached', () => {
